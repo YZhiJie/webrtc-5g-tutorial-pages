@@ -1,0 +1,168 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 840" font-family="'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#101a33"/>
+    </linearGradient>
+    <linearGradient id="titleGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="840" fill="url(#bg)"/>
+  <polygon points="980,0 1060,0 760,840 680,840" fill="#fbbf24" opacity="0.04"/>
+  <polygon points="150,0 220,0 1040,840 970,840" fill="#a78bfa" opacity="0.03"/>
+
+  <rect x="20" y="14" width="92" height="36" rx="9" fill="#7C3AED"/>
+  <text x="66" y="38" text-anchor="middle" font-size="18" font-weight="bold" fill="#ffffff">EP.06</text>
+  <text x="126" y="40" font-size="26" font-weight="bold" fill="url(#titleGrad)">URLLC 真的能到 1ms 吗</text>
+  <text x="1180" y="38" text-anchor="end" font-size="13" fill="#64748b">霓虹墨 NEON INK · webrtc-5g-tutorial</text>
+  <rect x="20" y="62" width="1160" height="2" rx="1" fill="url(#titleGrad)" opacity="0.6"/>
+
+  <!-- 面板 1 左上 · 困境 -->
+  <g transform="translate(20,84)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="380,0 450,0 120,361 50,361" fill="#22d3ee" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#22d3ee"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">1</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">困境：说好的 1ms 呢</text>
+    <!-- 像素酱头像 -->
+    <g transform="translate(52,100)">
+      <circle cx="0" cy="-2" r="17" fill="#ffd9b3"/>
+      <path d="M-17,-2 Q-17,-18 -12,-17 L-8,-20 L-4,-18 L0,-19 L4,-18 L8,-20 L12,-17 Q17,-18 17,-2 Q0,-14 -17,-2 Z" fill="#22d3ee"/>
+      <path d="M14,-6 L22,-8 L22,4 Q18,0 14,-4 Z" fill="#22d3ee"/>
+      <circle cx="-5" cy="0" r="1.7" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.7" fill="#0b1220"/>
+      <path d="M-4,6 q4,-4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,92 74,98 88,104" fill="#f8fafc"/>
+    <rect x="88" y="74" width="360" height="62" rx="10" fill="#f8fafc"/>
+    <text x="102" y="96" font-size="15" fill="#0b1220">像素酱：电信说 5G URLLC</text>
+    <text x="102" y="118" font-size="15" fill="#0b1220">承诺端到端 1ms……我实测</text>
+    <text x="102" y="138" font-size="15" fill="#0b1220">Chrome getStats 里还是 100ms+</text>
+    <!-- 实测图表 -->
+    <rect x="24" y="150" width="524" height="96" rx="8" fill="#0a0f1c" stroke="#22d3ee" stroke-opacity="0.35"/>
+    <text x="38" y="172" font-size="12.5" fill="#64748b" font-family="'SF Mono',Consolas,monospace">// getStats 实测 roundTripTime</text>
+    <text x="38" y="192" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">&gt; stats.remoteInboundVideoStreams[0].roundTripTime</text>
+    <text x="38" y="212" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">&gt;&gt; 0.132  // 132ms  😭</text>
+    <text x="38" y="240" font-size="12.5" fill="#fbbf24" font-family="'SF Mono',Consolas,monospace">&gt; // 宣传说的 1ms 在哪里……</text>
+    <!-- 1ms vs 100ms 条 -->
+    <rect x="24" y="258" width="524" height="72" rx="8" fill="#111a30" stroke="#1e2a44"/>
+    <rect x="24" y="258" width="4" height="72" rx="2" fill="#fbbf24"/>
+    <text x="40" y="280" font-size="13.5" fill="#fbbf24">5G 宣传 1ms</text>
+    <text x="40" y="300" font-size="13.5" fill="#94a3b8">实际 WebRTC 端到端 ≈ 100~200ms</text>
+    <text x="40" y="320" font-size="13.5" fill="#e2e8f0">差距 100 倍 —— 因为算的根本不是同一个东西</text>
+  </g>
+
+  <!-- 面板 2 右上 · 揭秘 -->
+  <g transform="translate(608,84)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="400,0 480,0 80,361 0,361" fill="#a78bfa" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#a78bfa"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">2</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">揭秘：延迟预算拆解</text>
+    <!-- 码叔头像 -->
+    <g transform="translate(52,100)">
+      <circle cx="0" cy="-2" r="17" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+      <circle cx="-5" cy="0" r="1.8" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.8" fill="#0b1220"/>
+      <path d="M-4,5 q4,4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,92 74,98 88,104" fill="#f8fafc"/>
+    <rect x="88" y="74" width="380" height="58" rx="10" fill="#f8fafc"/>
+    <text x="102" y="96" font-size="15" fill="#0b1220">码叔：5G 说的 1ms = **空口时延**</text>
+    <text x="102" y="118" font-size="15" fill="#0b1220">（基站 → 手机一跳）</text>
+    <text x="102" y="138" font-size="15" fill="#0b1220">端到端要算完整条链路：</text>
+    <!-- 延迟预算表 -->
+    <rect x="24" y="146" width="524" height="196" rx="8" fill="#0a0f1c" stroke="#a78bfa" stroke-opacity="0.35"/>
+    <text x="38" y="170" font-size="13.5" fill="#e2e8f0">一帧画面的完整旅程：</text>
+    <!-- 采集 -->
+    <rect x="38" y="180" width="80" height="24" rx="4" fill="#22d3ee" opacity="0.2"/>
+    <text x="78" y="196" text-anchor="middle" font-size="12" fill="#22d3ee">采集</text>
+    <text x="130" y="196" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">10~30ms（摄像头缓冲）</text>
+    <!-- 编码 -->
+    <rect x="38" y="210" width="80" height="24" rx="4" fill="#a78bfa" opacity="0.2"/>
+    <text x="78" y="226" text-anchor="middle" font-size="12" fill="#a78bfa">编码</text>
+    <text x="130" y="226" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">5~20ms（硬编快，软编慢）</text>
+    <!-- 传输 -->
+    <rect x="38" y="240" width="80" height="24" rx="4" fill="#fbbf24" opacity="0.2"/>
+    <text x="78" y="256" text-anchor="middle" font-size="12" fill="#fbbf24">传输</text>
+    <text x="130" y="256" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">4G: 50~150ms / 5G: 10~50ms</text>
+    <!-- SFU转发 -->
+    <rect x="38" y="270" width="80" height="24" rx="4" fill="#f472b6" opacity="0.2"/>
+    <text x="78" y="286" text-anchor="middle" font-size="12" fill="#f472b6">SFU 转发</text>
+    <text x="130" y="286" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">10~30ms（取决于机房位置）</text>
+    <!-- 解码+渲染 -->
+    <rect x="38" y="300" width="80" height="24" rx="4" fill="#34d399" opacity="0.2"/>
+    <text x="78" y="316" text-anchor="middle" font-size="12" fill="#34d399">解码+渲染</text>
+    <text x="130" y="316" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">20~50ms（JitterBuffer + 软/硬解）</text>
+    <text x="38" y="334" font-size="12.5" fill="#fbbf24">合计 ≈ 100~300ms  （5G 传输阶段能省 40~100ms）</text>
+  </g>
+
+  <!-- 面板 3 左下 · 实证 -->
+  <g transform="translate(20,462)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="100,0 30,0 500,361 570,361" fill="#f472b6" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#f472b6"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">3</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">实证：MEC 边缘 vs 中心机房</text>
+    <rect x="24" y="60" width="524" height="290" rx="8" fill="#0a0f1c" stroke="#f472b6" stroke-opacity="0.35"/>
+    <!-- 中心机房 -->
+    <text x="38" y="84" font-size="13.5" fill="#f472b6">❌ 传统架构：中心机房 SFU</text>
+    <circle cx="50" cy="110" r="12" fill="#f472b6" opacity="0.3"/>
+    <text x="50" y="115" text-anchor="middle" font-size="11" fill="#f472b6">SFU</text>
+    <text x="30" y="138" font-size="11.5" fill="#64748b" font-family="'SF Mono',Consolas,monospace">北京-上海-广州 用户 → 都连到深圳机房</text>
+    <text x="30" y="158" font-size="12" fill="#f97316">单向传输延迟：30~120ms（取决于距离）</text>
+    <!-- MEC 边缘 -->
+    <line x1="24" y1="170" x2="548" y2="170" stroke="#223055" stroke-width="1"/>
+    <text x="38" y="194" font-size="13.5" fill="#34d399">✅ 5G MEC：边缘侧 SFU</text>
+    <circle cx="50" cy="220" r="12" fill="#34d399" opacity="0.3"/>
+    <text x="50" y="225" text-anchor="middle" font-size="11" fill="#34d399">SFU</text>
+    <text x="30" y="248" font-size="11.5" fill="#64748b" font-family="'SF Mono',Consolas,monospace">北京用户 → 北京边缘 SFU（基站旁）</text>
+    <text x="30" y="268" font-size="11.5" fill="#64748b" font-family="'SF Mono',Consolas,monospace">上海用户 → 上海边缘 SFU</text>
+    <text x="30" y="292" font-size="12" fill="#22d3ee">单向传输延迟：5~15ms（省了 25~105ms）</text>
+    <!-- 对比条 -->
+    <text x="38" y="320" font-size="13" fill="#e2e8f0">端到端总延迟对比：</text>
+    <text x="38" y="340" font-size="12" fill="#f97316">4G + 中心 SFU：</text>
+    <rect x="140" y="330" width="380" height="12" rx="3" fill="#f97316" opacity="0.5"/>
+    <text x="530" y="340" font-size="11.5" fill="#f97316">~300ms</text>
+    <text x="38" y="358" font-size="12" fill="#34d399">5G + MEC SFU：</text>
+    <rect x="140" y="348" width="127" height="12" rx="3" fill="#34d399" opacity="0.5"/>
+    <text x="275" y="358" font-size="11.5" fill="#34d399">~150ms</text>
+  </g>
+
+  <!-- 面板 4 右下 · 结案 -->
+  <g transform="translate(608,462)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="480,0 572,0 120,361 0,361" fill="#f97316" opacity="0.05"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#f97316"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">4</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">结案：5G 省在哪 + 坑点</text>
+    <!-- 标签君头像 -->
+    <g transform="translate(52,90)">
+      <rect x="-19" y="14" width="38" height="22" rx="9" fill="#f97316"/>
+      <path d="M-5,18 L5,18 L3.5,27 L0,29 L-3.5,27 Z" fill="#f97316"/>
+      <circle cx="0" cy="-2" r="16" fill="#ffd9b3"/>
+      <path d="M-16,-2 L-11,-13 L-6,-4 L0,-14 L6,-4 L11,-13 L16,-2 Q0,-11 -16,-2 Z" fill="#f97316"/>
+      <circle cx="-5" cy="0" r="1.7" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.7" fill="#0b1220"/>
+      <path d="M-4,6 q4,-4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,82 74,88 88,94" fill="#f8fafc"/>
+    <rect x="88" y="64" width="420" height="66" rx="10" fill="#f8fafc"/>
+    <text x="102" y="86" font-size="15" fill="#0b1220">标签君：总结下——5G 真正能省的</text>
+    <text x="102" y="108" font-size="15" fill="#0b1220">是传输阶段那 40~100ms，</text>
+    <text x="102" y="128" font-size="15" fill="#0b1220">其他环节浏览器帮不了你。</text>
+    <rect x="24" y="144" width="524" height="190" rx="8" fill="#0a0f1c" stroke="#f97316" stroke-opacity="0.35"/>
+    <rect x="34" y="154" width="62" height="22" rx="5" fill="#f97316"/>
+    <text x="65" y="170" text-anchor="middle" font-size="12" font-weight="bold" fill="#0b1220">⚠ 坑点</text>
+    <text x="38" y="198" font-size="13" fill="#f472b6">1. 1ms 是空口时延，不是端到端</text>
+    <text x="52" y="220" font-size="12.5" fill="#94a3b8">—— 厂商宣传会省略"空口"二字，实际体验 100~200ms</text>
+    <text x="38" y="248" font-size="13" fill="#f472b6">2. 5G IPv6-only</text>
+    <text x="52" y="270" font-size="12.5" fill="#94a3b8">—— 部分运营商取消 NAT64，需要你的 WebRTC 服务支持 IPv6</text>
+    <text x="38" y="298" font-size="13" fill="#f472b6">3. 网络切片发现</text>
+    <text x="52" y="320" font-size="12.5" fill="#94a3b8">—— 5G QoS/E2E SLA 需要和运营商约定切片，浏览器层 API 还在草案</text>
+  </g>
+
+  <text x="1180" y="826" text-anchor="end" font-size="11" fill="#475569">NEON INK · webrtc-5g-tutorial · EP.06</text>
+</svg>

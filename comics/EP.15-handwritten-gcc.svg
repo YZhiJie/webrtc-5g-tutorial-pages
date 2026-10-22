@@ -1,0 +1,152 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 840" font-family="'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#101a33"/>
+    </linearGradient>
+    <linearGradient id="titleGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+    <linearGradient id="trendGrad" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#f97316"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="840" fill="url(#bg)"/>
+  <polygon points="980,0 1060,0 760,840 680,840" fill="#22d3ee" opacity="0.04"/>
+  <polygon points="150,0 220,0 1040,840 970,840" fill="#f97316" opacity="0.03"/>
+
+  <rect x="20" y="14" width="92" height="36" rx="9" fill="#7C3AED"/>
+  <text x="66" y="38" text-anchor="middle" font-size="18" font-weight="bold" fill="#ffffff">EP.15</text>
+  <text x="126" y="40" font-size="26" font-weight="bold" fill="url(#titleGrad)">用延迟梯度估带宽</text>
+  <text x="1180" y="38" text-anchor="end" font-size="13" fill="#64748b">霓虹墨 NEON INK · webrtc-5g-tutorial</text>
+  <rect x="20" y="62" width="1160" height="2" rx="1" fill="url(#titleGrad)" opacity="0.6"/>
+
+  <!-- 面板 1 左上 · 困境 -->
+  <g transform="translate(20,84)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="380,0 450,0 120,361 50,361" fill="#22d3ee" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#22d3ee"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">1</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">困境：码率没变却越来越卡</text>
+    <g transform="translate(52,110)">
+      <rect x="-19" y="14" width="38" height="22" rx="9" fill="#f97316"/>
+      <path d="M-5,18 L5,18 L3.5,27 L0,29 L-3.5,27 Z" fill="#f97316"/>
+      <circle cx="0" cy="-2" r="16" fill="#ffd9b3"/>
+      <path d="M-16,-2 L-11,-13 L-6,-4 L0,-14 L6,-4 L11,-13 L16,-2 Q0,-11 -16,-2 Z" fill="#f97316"/>
+      <circle cx="-5" cy="0" r="1.7" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.7" fill="#0b1220"/>
+      <path d="M-4,6 q4,-4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,100 74,106 88,112" fill="#f8fafc"/>
+    <rect x="88" y="82" width="400" height="66" rx="10" fill="#f8fafc"/>
+    <text x="102" y="104" font-size="15" fill="#0b1220">标签君：直播推流 4G 切 5G，</text>
+    <text x="102" y="126" font-size="15" fill="#0b1220">码率明明设了 3Mbps，观众</text>
+    <text x="102" y="146" font-size="14" fill="#f472b6">却说画面一直在转圈……</text>
+    <rect x="24" y="162" width="524" height="100" rx="8" fill="#0a0f1c" stroke="#22d3ee" stroke-opacity="0.35"/>
+    <text x="38" y="184" font-size="12.5" fill="#64748b" font-family="'SF Mono',Consolas,monospace">// 标签君盯着自己写的推流器日志</text>
+    <text x="38" y="206" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">send_bitrate = 3000 kbps   ✅ 没降</text>
+    <text x="38" y="228" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">loss_rate    = 0.02        ✅ 丢包不高</text>
+    <text x="38" y="248" font-size="12.5" fill="#fbbf24" font-family="'SF Mono',Consolas,monospace">rtt          = 45ms → 380ms  ❌ 越堆越高</text>
+    <text x="38" y="264" font-size="12.5" fill="#94a3b8" font-family="'SF Mono',Consolas,monospace">// 丢包不高但延迟狂涨 → 拥塞前兆！</text>
+    <rect x="24" y="278" width="524" height="52" rx="8" fill="#111a30" stroke="#1e2a44"/>
+    <rect x="24" y="278" width="4" height="52" rx="2" fill="#f97316"/>
+    <text x="40" y="300" font-size="13.5" fill="#e2e8f0">只看码率和丢包看不出拥塞，缓冲队列早就堆满了</text>
+    <text x="40" y="320" font-size="13.5" fill="#94a3b8">需要一种更敏感的指标——延迟梯度（delay gradient）</text>
+  </g>
+
+  <!-- 面板 2 右上 · 揭秘 -->
+  <g transform="translate(608,84)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="400,0 480,0 80,361 0,361" fill="#a78bfa" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#a78bfa"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">2</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">揭秘：延迟梯度是什么</text>
+    <g transform="translate(52,110)">
+      <rect x="-19" y="14" width="38" height="22" rx="9" fill="#f8fafc" stroke="#223055" stroke-width="1.5"/>
+      <circle cx="0" cy="-2" r="17" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+      <circle cx="-5" cy="0" r="1.8" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.8" fill="#0b1220"/>
+      <path d="M-4,5 q4,4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,100 74,106 88,112" fill="#f8fafc"/>
+    <rect x="88" y="82" width="400" height="52" rx="10" fill="#f8fafc"/>
+    <text x="102" y="104" font-size="15" fill="#0b1220">码叔：GCC 不看丢包，看的是</text>
+    <text x="102" y="126" font-size="15" fill="#0b1220">到达间隔和发送间隔的差值</text>
+    <rect x="24" y="152" width="524" height="178" rx="8" fill="#0a0f1c" stroke="#a78bfa" stroke-opacity="0.35"/>
+    <text x="38" y="176" font-size="13" fill="#22d3ee">趋势计算（Trendline Filter）：</text>
+    <text x="52" y="200" font-size="12.5" fill="#fbbf24" font-family="'SF Mono',Consolas,monospace">Δarrival = recv_time[i] - recv_time[i-1]</text>
+    <text x="52" y="222" font-size="12.5" fill="#fbbf24" font-family="'SF Mono',Consolas,monospace">Δsend    = send_time[i] - send_time[i-1]</text>
+    <text x="52" y="244" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">gradient = Δarrival - Δsend</text>
+    <text x="38" y="270" font-size="13" fill="#a78bfa">判定：</text>
+    <text x="52" y="292" font-size="12.5" fill="#34d399" font-family="'SF Mono',Consolas,monospace">gradient &gt; 0  → 排队在增加（Overuse 过用）</text>
+    <text x="52" y="314" font-size="12.5" fill="#94a3b8" font-family="'SF Mono',Consolas,monospace">gradient ≈ 0  → 网络刚好满载（Normal）</text>
+    <text x="52" y="336" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">gradient &lt; 0  → 队列在排空（Underuse 欠用）</text>
+    <rect x="24" y="352" width="524" height="0" rx="0" fill="none"/>
+    <polyline points="70,340 130,330 190,310 250,270 310,240 370,220 430,200 490,190" fill="none" stroke="url(#trendGrad)" stroke-width="2" opacity="0.6" stroke-dasharray="4,3"/>
+    <text x="500" y="180" font-size="11" fill="#f97316" text-anchor="end" opacity="0.8">trend ↑</text>
+  </g>
+
+  <!-- 面板 3 左下 · 实证 -->
+  <g transform="translate(20,462)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="100,0 30,0 500,361 570,361" fill="#f472b6" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#f472b6"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">3</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">实证：GCC 模拟器跑一遍</text>
+    <g transform="translate(52,100)">
+      <circle cx="0" cy="-2" r="16" fill="#ffd9b3"/>
+      <path d="M-16,-2 L-11,-13 L-6,-4 L0,-14 L6,-4 L11,-13 L16,-2 Q0,-11 -16,-2 Z" fill="#22d3ee"/>
+      <path d="M-16,-6 Q-22,-2 -16,2 M-14,-8 Q-14,-16 -6,-16 M6,-16 Q14,-16 14,-8" stroke="#22d3ee" stroke-width="3" fill="none"/>
+      <circle cx="-5" cy="0" r="1.7" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.7" fill="#0b1220"/>
+      <path d="M-4,6 q4,-4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,90 74,96 88,102" fill="#f8fafc"/>
+    <rect x="88" y="72" width="420" height="48" rx="10" fill="#f8fafc"/>
+    <text x="102" y="94" font-size="15" fill="#0b1220">像素酱：我把链路容量调成 3→1→5 Mbps，</text>
+    <text x="102" y="114" font-size="15" fill="#0b1220">看 GCC 估计码率怎么追上去</text>
+    <rect x="24" y="132" width="524" height="198" rx="8" fill="#0a0f1c" stroke="#f472b6" stroke-opacity="0.35"/>
+    <text x="38" y="156" font-size="13.5" fill="#e2e8f0">模拟输出（每秒打印一次估计码率）：</text>
+    <text x="52" y="180" font-size="12.5" fill="#34d399" font-family="'SF Mono',Consolas,monospace">t=1s  cap=3.0M  est=2.8M  state=normal</text>
+    <text x="52" y="200" font-size="12.5" fill="#fbbf24" font-family="'SF Mono',Consolas,monospace">t=2s  cap=1.0M  est=2.8M  state=overuse  ← 骤降！</text>
+    <text x="52" y="220" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">t=3s  cap=1.0M  est=1.4M  state=overuse  ×0.5</text>
+    <text x="52" y="240" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">t=4s  cap=1.0M  est=0.7M  state=overuse  ×0.5</text>
+    <text x="52" y="260" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">t=5s  cap=5.0M  est=0.8M  state=underuse ← 回升！</text>
+    <text x="52" y="280" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">t=6s  cap=5.0M  est=1.6M  state=normal   +0.8M</text>
+    <text x="52" y="300" font-size="12.5" fill="#34d399" font-family="'SF Mono',Consolas,monospace">t=7s  cap=5.0M  est=2.4M  state=normal   +0.8M</text>
+    <text x="52" y="320" font-size="12.5" fill="#94a3b8" font-family="'SF Mono',Consolas,monospace">// overuse 乘性下降 · underuse 加性爬升</text>
+  </g>
+
+  <!-- 面板 4 右下 · 结案 -->
+  <g transform="translate(608,462)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="480,0 572,0 120,361 0,361" fill="#f97316" opacity="0.05"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#f97316"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">4</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">结案：GCC 最佳实践</text>
+    <g transform="translate(52,95)">
+      <rect x="-19" y="14" width="38" height="22" rx="9" fill="#f8fafc" stroke="#223055" stroke-width="1.5"/>
+      <circle cx="0" cy="-2" r="17" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+      <circle cx="-5" cy="0" r="1.8" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.8" fill="#0b1220"/>
+      <path d="M-4,5 q4,4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,85 74,91 88,97" fill="#f8fafc"/>
+    <rect x="88" y="67" width="420" height="58" rx="10" fill="#f8fafc"/>
+    <text x="102" y="90" font-size="15" fill="#0b1220">码叔：记住三条——窗口要够长、</text>
+    <text x="102" y="112" font-size="15" fill="#0b1220">步长要克制、最小码率别归零</text>
+    <rect x="24" y="152" width="524" height="178" rx="8" fill="#0a0f1c" stroke="#f97316" stroke-opacity="0.35"/>
+    <rect x="34" y="162" width="62" height="22" rx="5" fill="#f97316"/>
+    <text x="65" y="178" text-anchor="middle" font-size="12" font-weight="bold" fill="#0b1220">⚠ 坑点</text>
+    <text x="38" y="204" font-size="13" fill="#f472b6">1. 趋势窗口太短 → 误判成 overuse</text>
+    <text x="52" y="226" font-size="12.5" fill="#94a3b8">GCC 默认用 20 个包做线性回归；少于 5 个包时梯度噪声极大，容易把正常抖动当拥塞</text>
+    <text x="38" y="252" font-size="13" fill="#f472b6">2. 加性步长太大 → 码率振荡</text>
+    <text x="52" y="274" font-size="12.5" fill="#94a3b8">Underuse 时每次 +1Mbps 会来回撞墙；推荐 +8% 或 +100kbps 小步快跑，让曲线平滑</text>
+    <text x="38" y="300" font-size="13" fill="#f472b6">3. 最小码率设 0 → 直接静默</text>
+    <text x="52" y="322" font-size="12.5" fill="#94a3b8">极端 overuse 下 est 会一路乘到 0；必须设下限（如 100kbps）保音频和信令通道</text>
+  </g>
+
+  <text x="1180" y="826" text-anchor="end" font-size="11" fill="#475569">NEON INK · webrtc-5g-tutorial · EP.15</text>
+</svg>

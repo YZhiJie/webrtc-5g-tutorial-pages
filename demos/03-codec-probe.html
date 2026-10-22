@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head><title>WebRTC 编解码器探测</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 960px; margin: 40px auto; padding: 0 20px; }
+  table { border-collapse: collapse; width: 100%; margin: 16px 0; }
+  th, td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; }
+  th { background: #f5f5f5; }
+  h2 { border-bottom: 2px solid #22d3ee; padding-bottom: 6px; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+  .tag-yes { background: #dcfce7; color: #166534; }
+  .tag-no { background: #fee2e2; color: #991b1b; }
+  pre { background: #f8f8f8; padding: 12px; border-radius: 6px; overflow-x: auto; }
+</style>
+</head>
+<body>
+
+<h2>🎬 浏览器编解码器探测</h2>
+<div id="video-table"></div>
+<div id="audio-table"></div>
+
+<h2>📝 SDP 中的编解码器声明</h2>
+<pre id="sdp-output">生成中...</pre>
+
+<h2>🔗 协商模拟</h2>
+<p>假设对端只支持 <strong>H264 + Opus</strong>，协商结果：</p>
+<pre id="negotiation">...</pre>
+
+<script>
+const videoTable = document.getElementById('video-table')
+const audioTable = document.getElementById('audio-table')
+const sdpOutput = document.getElementById('sdp-output')
+const negotiation = document.getElementById('negotiation')
+
+const VIDEO_CODECS = ['VP8', 'VP9', 'H264', 'AV1', 'H265']
+const AUDIO_CODECS = ['Opus', 'G711', 'G722']
+
+function tag(yes) {
+  return `<span class="tag ${yes ? 'tag-yes' : 'tag-no'}">${yes ? '✅ 支持' : '❌ 不支持'}</span>`
+}
+
+function codecSupported(sdp, codecName) {
+  // SDP rtpmap 行里搜
+  const regex = new RegExp(`a=rtpmap:\\d+ ${codecName}`)
+  return regex.test(sdp)
+}
+
+async function detect() {
+  const pc = new RTCPeerConnection({ iceServers: [] })
+
+  // 添加音视频 track 来触发编解码器声明
+  const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+  stream.getTracks().forEach(track => pc.addTrack(track, stream))
+
+  const offer = await pc.createOffer()
+
+  // 视频编解码支持情况
+  let videoHtml = '<table><tr><th>编解码器</th><th>支持</th><th>SDP 中声明</th></tr>'
+  for (const c of VIDEO_CODECS) {
+    videoHtml += `<tr><td>${c}</td><td>${tag(codecSupported(offer.sdp, c))}</td><td>${codecSupported(offer.sdp, c) ? '在 SDP 里' : '未声明'}</td></tr>`
+  }
+  videoHtml += '</table>'
+  videoTable.innerHTML = videoHtml
+
+  // 音频
+  let audioHtml = '<table><tr><th>编解码器</th><th>支持</th></tr>'
+  for (const c of AUDIO_CODECS) {
+    audioHtml += `<tr><td>${c}</td><td>${tag(codecSupported(offer.sdp, c))}</td></tr>`
+  }
+  audioHtml += '</table>'
+  audioTable.innerHTML = audioHtml
+
+  // 显示 SDP 中 m=video 和 m=audio 段
+  const lines = offer.sdp.split('\r\n')
+  let sdpExcerpt = ''
+  let capture = false
+  for (const l of lines) {
+    if (l.startsWith('m=video') || l.startsWith('m=audio')) capture = true
+    if (capture) sdpExcerpt += l + '\n'
+    if (capture && l.startsWith('a=end-of-candidates')) capture = false
+  }
+  sdpOutput.textContent = sdpExcerpt || offer.sdp
+
+  // 模拟协商：对端只支持 H264 + Opus
+  const localCodecs = VIDEO_CODECS.filter(c => codecSupported(offer.sdp, c))
+  const remoteVideo = ['H264']  // 对端只支持 H264
+  const remoteAudio = ['Opus']
+
+  const videoResult = localCodecs.find(c => remoteVideo.includes(c)) || '无交集'
+  const audioResult = codecSupported(offer.sdp, 'Opus') && remoteAudio.includes('Opus') ? 'Opus' : '无交集'
+
+  negotiation.textContent = `
+本地支持的视频编解码器: ${localCodecs.join(', ')}
+对端支持的视频编解码器: ${remoteVideo.join(', ')}
+══════════════════════════════════════════
+视频协商结果: ${videoResult}
+
+本地支持的音频编解码器: Opus, G711${codecSupported(offer.sdp, 'G722') ? ', G722' : ''}
+对端支持的音频编解码器: ${remoteAudio.join(', ')}
+══════════════════════════════════════════
+音频协商结果: ${audioResult}
+
+结论: 浏览器自动选交集里优先级最高的那个
+`
+
+  stream.getTracks().forEach(t => t.stop())
+  pc.close()
+}
+
+detect().catch(err => {
+  document.body.innerHTML += `<p style="color:red">错误: ${err.message}</p>
+    <p style="color:#666">提示：需要 HTTPS 或 localhost 环境</p>`
+})
+</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "series": "neon-ink-webrtc-5g",
+  "version": "1.0",
+  "episodes": [
+    { "ep": "00", "slug": "prerequisites", "title": "浏览器安全模型那道坎", "guide": "00-prerequisites" },
+    { "ep": "01", "slug": "what-is-webrtc", "title": "浏览器里藏着一整套 RTC 栈", "guide": "01-overview" },
+    { "ep": "02", "slug": "media-capture", "title": "getUserMedia 怎么把摄像头变成流", "guide": "02-media-capture" },
+    { "ep": "03", "slug": "codecs", "title": "编解码大战：VP8 vs H264 vs Opus", "guide": "03-codecs" },
+    { "ep": "04", "slug": "ice-penetration", "title": "两个 NAT 背后的人怎么握手", "guide": "04-ice-stun-turn" },
+    { "ep": "05", "slug": "sdp-signaling", "title": "Offer / Answer 里到底写了什么", "guide": "05-signaling-sdp" },
+    { "ep": "06", "slug": "5g-urllc", "title": "URLLC 真的能到 1ms 吗", "guide": "06-5g-adaptation" },
+    { "ep": "07", "slug": "basic-call", "title": "两个标签页的握手日记", "guide": "07-basic-call" },
+    { "ep": "08", "slug": "live-vs-rtmp", "title": "WebRTC 直播 vs 传统 RTMP", "guide": "08-live-streaming" },
+    { "ep": "09", "slug": "latency-optimization", "title": "一帧画面的 100ms 旅行", "guide": "09-optimization" },
+    { "ep": "10", "slug": "production-compat", "title": "兼容性矩阵那一张大表", "guide": "10-production" },
+    { "ep": "11", "slug": "handwritten-stun", "title": "20 字节头部里的魔法饼干", "guide": "11-handwritten-stun" },
+    { "ep": "12", "slug": "handwritten-turn", "title": "对称 NAT 下的中继租约", "guide": "12-handwritten-turn" },
+    { "ep": "13", "slug": "handwritten-rtp", "title": "给每个 UDP 包编上号", "guide": "13-handwritten-rtp" },
+    { "ep": "14", "slug": "handwritten-jitterbuffer", "title": "乱序包排队进直播间", "guide": "14-handwritten-jitterbuffer" },
+    { "ep": "15", "slug": "handwritten-gcc", "title": "用延迟梯度估带宽", "guide": "15-handwritten-gcc" },
+    { "ep": "16", "slug": "handwritten-dtls-srtp", "title": "UDP 之上的握手与加密", "guide": "16-handwritten-dtls-srtp" }
+  ]
+}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <video id="local" autoplay playsinline muted></video>
+  <button id="start">开启摄像头</button>
+  <button id="stop">关闭</button>
+
+<script>
+let stream = null
+
+start.onclick = async () => {
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { width: 1280, height: 720 },
+      audio: true
+    })
+    local.srcObject = stream
+  } catch (err) {
+    alert('采集失败: ' + err.message)
+  }
+}
+
+stop.onclick = () => {
+  stream?.getTracks().forEach(t => t.stop())
+  stream = null
+  local.srcObject = null
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 840" font-family="'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#101a33"/>
+    </linearGradient>
+    <linearGradient id="titleGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="840" fill="url(#bg)"/>
+  <polygon points="980,0 1060,0 760,840 680,840" fill="#34d399" opacity="0.04"/>
+  <polygon points="150,0 220,0 1040,840 970,840" fill="#a78bfa" opacity="0.03"/>
+
+  <rect x="20" y="14" width="92" height="36" rx="9" fill="#7C3AED"/>
+  <text x="66" y="38" text-anchor="middle" font-size="18" font-weight="bold" fill="#ffffff">EP.11</text>
+  <text x="126" y="40" font-size="26" font-weight="bold" fill="url(#titleGrad)">20 字节头部里的魔法饼干</text>
+  <text x="1180" y="38" text-anchor="end" font-size="13" fill="#64748b">霓虹墨 NEON INK · webrtc-5g-tutorial</text>
+  <rect x="20" y="62" width="1160" height="2" rx="1" fill="url(#titleGrad)" opacity="0.6"/>
+
+  <!-- 面板 1 左上 · 困境 -->
+  <g transform="translate(20,84)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="380,0 450,0 120,361 50,361" fill="#34d399" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#22d3ee"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">1</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">困境：RFC 5389 看懵了</text>
+    <!-- 标签君头像 -->
+    <g transform="translate(52,104)">
+      <rect x="-19" y="14" width="38" height="22" rx="9" fill="#3b82f6"/>
+      <path d="M-6,17 L6,17 L5,27 L0,30 L-5,27 Z" fill="#f97316"/>
+      <text x="0" y="26" text-anchor="middle" font-size="8" font-weight="bold" fill="#ffffff">5</text>
+      <circle cx="0" cy="-2" r="16" fill="#ffd9b3"/>
+      <path d="M-16,-2 L-11,-13 L-6,-4 L0,-14 L6,-4 L11,-13 L16,-2 Q0,-11 -16,-2 Z" fill="#f97316"/>
+      <circle cx="-5" cy="0" r="1.7" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.7" fill="#0b1220"/>
+      <path d="M-4,6 q4,-4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,94 74,100 88,106" fill="#f8fafc"/>
+    <rect x="88" y="76" width="400" height="70" rx="10" fill="#f8fafc"/>
+    <text x="102" y="98" font-size="15" fill="#0b1220">标签君：照着 RFC 5389 写解析，</text>
+    <text x="102" y="120" font-size="15" fill="#0b1220">20 字节头部盯了一下午……</text>
+    <text x="102" y="140" font-size="15" fill="#0b1220">Magic Cookie 到底魔在哪？</text>
+    <rect x="24" y="160" width="524" height="108" rx="8" fill="#0a0f1c" stroke="#22d3ee" stroke-opacity="0.35"/>
+    <text x="38" y="182" font-size="12.5" fill="#64748b" font-family="'SF Mono',Consolas,monospace">// 标签君盯着 Wireshark 抓包：</text>
+    <text x="38" y="204" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">0000  00 01 00 00 21 12 a4 42 ab e8 ec e2</text>
+    <text x="38" y="226" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">0010  c2 59 e3 98 cd 54 75 d6</text>
+    <text x="38" y="248" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">// 每个字节都认识，连起来读不懂</text>
+    <rect x="24" y="282" width="524" height="50" rx="8" fill="#111a30" stroke="#1e2a44"/>
+    <rect x="24" y="282" width="4" height="50" rx="2" fill="#34d399"/>
+    <text x="40" y="303" font-size="13.5" fill="#e2e8f0">字段地图没画出来之前，字节只是字节</text>
+    <text x="40" y="323" font-size="13.5" fill="#94a3b8">—— 手写协议第一步：把 20 字节头部画成表格</text>
+  </g>
+
+  <!-- 面板 2 右上 · 揭秘 -->
+  <g transform="translate(608,84)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="400,0 480,0 80,361 0,361" fill="#a78bfa" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#a78bfa"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">2</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">揭秘：20 字节四字段</text>
+    <!-- 码叔头像 -->
+    <g transform="translate(52,104)">
+      <rect x="-19" y="14" width="38" height="22" rx="9" fill="#cbd5e1"/>
+      <circle cx="0" cy="-2" r="17" fill="#ffd9b3"/>
+      <path d="M-17,-3 Q-13,-19 0,-20 Q13,-19 17,-3 Q8,-10 0,-10 Q-8,-10 -17,-3 Z" fill="#f1f5f9"/>
+      <path d="M-5,9 Q0,17 5,9 Q0,12 -5,9 Z" fill="#f1f5f9"/>
+      <circle cx="-5.5" cy="-1" r="3.6" fill="none" stroke="#0b1220" stroke-width="1.1"/>
+      <circle cx="5.5" cy="-1" r="3.6" fill="none" stroke="#0b1220" stroke-width="1.1"/>
+      <line x1="-1.9" y1="-1" x2="1.9" y2="-1" stroke="#0b1220" stroke-width="1.1"/>
+      <circle cx="-5.5" cy="-1" r="1.2" fill="#0b1220"/>
+      <circle cx="5.5" cy="-1" r="1.2" fill="#0b1220"/>
+      <path d="M-3,6 q3,2.5 6,0" stroke="#0b1220" stroke-width="1.2" fill="none"/>
+    </g>
+    <polygon points="88,94 74,100 88,106" fill="#f8fafc"/>
+    <rect x="88" y="76" width="400" height="70" rx="10" fill="#f8fafc"/>
+    <text x="102" y="98" font-size="15" fill="#0b1220">码叔：20 字节就四块——</text>
+    <text x="102" y="120" font-size="15" fill="#0b1220">type 2B + length 2B +</text>
+    <text x="102" y="140" font-size="15" fill="#0b1220">cookie 4B + tid 12B</text>
+    <rect x="24" y="158" width="524" height="138" rx="8" fill="#0a0f1c" stroke="#a78bfa" stroke-opacity="0.35"/>
+    <text x="38" y="180" font-size="12.5" fill="#64748b" font-family="'SF Mono',Consolas,monospace">// 20 字节头部 = 4 个字段</text>
+    <text x="38" y="202" font-size="12.5" fill="#22d3ee" font-family="'SF Mono',Consolas,monospace">[0] 00 01         Binding Request 0x0001</text>
+    <text x="38" y="224" font-size="12.5" fill="#fbbf24" font-family="'SF Mono',Consolas,monospace">[2] 00 00         Body Length = 0</text>
+    <text x="38" y="246" font-size="12.5" fill="#34d399" font-family="'SF Mono',Consolas,monospace">[4] 21 12 a4 42   Magic Cookie ★</text>
+    <text x="38" y="268" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">[8] ab e8…75 d6   Transaction ID ×12B</text>
+    <text x="38" y="288" font-size="12.5" fill="#94a3b8" font-family="'SF Mono',Consolas,monospace">// 前 2 位固定 0，是为了和 RTP 区分</text>
+    <rect x="24" y="308" width="524" height="44" rx="8" fill="#111a30" stroke="#1e2a44"/>
+    <rect x="24" y="308" width="4" height="44" rx="2" fill="#34d399"/>
+    <text x="40" y="327" font-size="13.5" fill="#e2e8f0">Magic Cookie = 0x2112A442，RFC 5389 写死</text>
+    <text x="40" y="345" font-size="13.5" fill="#94a3b8">先校验 cookie 再解析 —— 顺便识别旧版 3489</text>
+  </g>
+
+  <!-- 面板 3 左下 · 实证 -->
+  <g transform="translate(20,462)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="100,0 30,0 500,361 570,361" fill="#34d399" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#f472b6"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">3</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">实证：Node 逐字节验证</text>
+    <!-- 像素酱头像 -->
+    <g transform="translate(52,98)">
+      <rect x="-19" y="14" width="38" height="22" rx="9" fill="#a78bfa"/>
+      <text x="0" y="29" text-anchor="middle" font-size="9" font-weight="bold" fill="#0b1220">{}</text>
+      <circle cx="0" cy="-2" r="17" fill="#ffd9b3"/>
+      <path d="M-16,-5 Q-9,-19 0,-20 Q11,-19 16,-5 Q8,-11 0,-11 Q-8,-11 -16,-5 Z" fill="#22d3ee"/>
+      <path d="M13,-9 Q25,-2 19,13 Q23,0 11,-4 Z" fill="#22d3ee"/>
+      <circle cx="-5" cy="0" r="1.7" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.7" fill="#0b1220"/>
+      <path d="M-4,6 q4,3.5 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,88 74,94 88,100" fill="#f8fafc"/>
+    <rect x="88" y="70" width="400" height="50" rx="10" fill="#f8fafc"/>
+    <text x="102" y="92" font-size="15" fill="#0b1220">像素酱：跑一遍 stun-client.js，</text>
+    <text x="102" y="112" font-size="15" fill="#0b1220">逐字节对照 RFC 验证！</text>
+    <rect x="24" y="134" width="524" height="130" rx="8" fill="#0a0f1c" stroke="#f472b6" stroke-opacity="0.35"/>
+    <text x="38" y="156" font-size="12.5" fill="#64748b" font-family="'SF Mono',Consolas,monospace">// stun-client.js 逐字段校验响应</text>
+    <text x="38" y="178" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">buf.readUInt16BE(0)   // 0x0101 Success</text>
+    <text x="38" y="200" font-size="12.5" fill="#fbbf24" font-family="'SF Mono',Consolas,monospace">buf.readUInt16BE(2)   // Body Length = 56</text>
+    <text x="38" y="222" font-size="12.5" fill="#34d399" font-family="'SF Mono',Consolas,monospace">buf.readUInt32BE(4)   // 0x2112A442 ✅</text>
+    <text x="38" y="244" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">buf.subarray(8, 20)   // tid 原样回传</text>
+    <rect x="24" y="276" width="524" height="62" rx="8" fill="#111a30" stroke="#1e2a44"/>
+    <rect x="24" y="276" width="4" height="62" rx="2" fill="#34d399"/>
+    <text x="40" y="298" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">0000  01 01 00 38 21 12 a4 42 ab e8 …</text>
+    <text x="40" y="320" font-size="13.5" fill="#e2e8f0">magic 恰好等于 0x2112A442，tid 配对成功 ✅</text>
+  </g>
+
+  <!-- 面板 4 右下 · 结案 -->
+  <g transform="translate(608,462)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="480,0 572,0 120,361 0,361" fill="#f97316" opacity="0.05"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#f97316"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">4</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">结案：手写 STUN 三牢记</text>
+    <!-- 码叔头像 -->
+    <g transform="translate(52,100)">
+      <rect x="-19" y="14" width="38" height="22" rx="9" fill="#cbd5e1"/>
+      <circle cx="0" cy="-2" r="17" fill="#ffd9b3"/>
+      <path d="M-17,-3 Q-13,-19 0,-20 Q13,-19 17,-3 Q8,-10 0,-10 Q-8,-10 -17,-3 Z" fill="#f1f5f9"/>
+      <path d="M-5,9 Q0,17 5,9 Q0,12 -5,9 Z" fill="#f1f5f9"/>
+      <circle cx="-5.5" cy="-1" r="3.6" fill="none" stroke="#0b1220" stroke-width="1.1"/>
+      <circle cx="5.5" cy="-1" r="3.6" fill="none" stroke="#0b1220" stroke-width="1.1"/>
+      <line x1="-1.9" y1="-1" x2="1.9" y2="-1" stroke="#0b1220" stroke-width="1.1"/>
+      <circle cx="-5.5" cy="-1" r="1.2" fill="#0b1220"/>
+      <circle cx="5.5" cy="-1" r="1.2" fill="#0b1220"/>
+      <path d="M-3,6 q3,2.5 6,0" stroke="#0b1220" stroke-width="1.2" fill="none"/>
+    </g>
+    <polygon points="88,90 74,96 88,102" fill="#f8fafc"/>
+    <rect x="88" y="72" width="420" height="68" rx="10" fill="#f8fafc"/>
+    <text x="102" y="94" font-size="15" fill="#0b1220">码叔：手写协议没那么玄，</text>
+    <text x="102" y="116" font-size="15" fill="#0b1220">先把 20 字节头部吃透，</text>
+    <text x="102" y="136" font-size="15" fill="#0b1220">TLV 属性只是循环解析。</text>
+    <rect x="24" y="152" width="524" height="182" rx="8" fill="#0a0f1c" stroke="#f97316" stroke-opacity="0.35"/>
+    <rect x="34" y="162" width="62" height="22" rx="5" fill="#f97316"/>
+    <text x="65" y="178" text-anchor="middle" font-size="12" font-weight="bold" fill="#0b1220">⚠ 坑点</text>
+    <text x="38" y="204" font-size="13" fill="#f472b6">1. 头部前 2 位必须置 0</text>
+    <text x="52" y="226" font-size="12.5" fill="#94a3b8">—— RTP 前 2 位是版本号 10，置错会被当成 RTP 包</text>
+    <text x="38" y="252" font-size="13" fill="#f472b6">2. Length 必须 4 字节对齐</text>
+    <text x="52" y="274" font-size="12.5" fill="#94a3b8">—— TLV 属性值不足补 0，否则后续属性全部错位</text>
+    <text x="38" y="300" font-size="13" fill="#f472b6">3. Transaction ID 原样回传</text>
+    <text x="52" y="322" font-size="12.5" fill="#94a3b8">—— 服务端改写一个字节，客户端就匹配不上请求</text>
+  </g>
+
+  <text x="1180" y="826" text-anchor="end" font-size="11" fill="#475569">NEON INK · webrtc-5g-tutorial · EP.11</text>
+</svg>

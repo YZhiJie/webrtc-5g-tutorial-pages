@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 840" font-family="'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#101a33"/>
+    </linearGradient>
+    <linearGradient id="titleGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="840" fill="url(#bg)"/>
+  <polygon points="980,0 1060,0 760,840 680,840" fill="#22d3ee" opacity="0.04"/>
+  <polygon points="150,0 220,0 1040,840 970,840" fill="#a78bfa" opacity="0.03"/>
+
+  <rect x="20" y="14" width="92" height="36" rx="9" fill="#7C3AED"/>
+  <text x="66" y="38" text-anchor="middle" font-size="18" font-weight="bold" fill="#ffffff">EP.03</text>
+  <text x="126" y="40" font-size="26" font-weight="bold" fill="url(#titleGrad)">编解码大战：VP8 vs H264 vs Opus</text>
+  <text x="1180" y="38" text-anchor="end" font-size="13" fill="#64748b">霓虹墨 NEON INK · webrtc-5g-tutorial</text>
+  <rect x="20" y="62" width="1160" height="2" rx="1" fill="url(#titleGrad)" opacity="0.6"/>
+
+  <!-- 面板 1 左上 · 困境 -->
+  <g transform="translate(20,84)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="380,0 450,0 120,361 50,361" fill="#22d3ee" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#22d3ee"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">1</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">困境：Chrome 连不上 Safari</text>
+    <g transform="translate(52,110)">
+      <circle cx="0" cy="-2" r="16" fill="#ffd9b3"/>
+      <path d="M-16,-2 L-11,-13 L-6,-4 L0,-14 L6,-4 L11,-13 L16,-2 Q0,-11 -16,-2 Z" fill="#22d3ee"/>
+      <path d="M-16,-6 Q-22,-2 -16,2 M-14,-8 Q-14,-16 -6,-16 M6,-16 Q14,-16 14,-8" stroke="#22d3ee" stroke-width="3" fill="none"/>
+      <circle cx="-5" cy="0" r="1.7" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.7" fill="#0b1220"/>
+      <path d="M-4,6 q4,-4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,100 74,106 88,112" fill="#f8fafc"/>
+    <rect x="88" y="82" width="400" height="66" rx="10" fill="#f8fafc"/>
+    <text x="102" y="104" font-size="15" fill="#0b1220">像素酱：Chrome 默认 VP8，</text>
+    <text x="102" y="126" font-size="15" fill="#0b1220">但 Safari 只认 H264……</text>
+    <text x="102" y="146" font-size="14" fill="#f472b6">结果 SDP 协商直接崩了</text>
+    <rect x="24" y="162" width="524" height="100" rx="8" fill="#0a0f1c" stroke="#22d3ee" stroke-opacity="0.35"/>
+    <text x="38" y="184" font-size="12.5" fill="#64748b" font-family="'SF Mono',Consolas,monospace">// Chrome 的 SDP Offer（截一段）</text>
+    <text x="38" y="204" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">m=video 9 UDP/TLS/RTP/SAVPF 96 97 98 99</text>
+    <text x="38" y="224" font-size="12.5" fill="#94a3b8" font-family="'SF Mono',Consolas,monospace">// 96=VP8 97=VP9 98=H264 99=VP12</text>
+    <text x="38" y="244" font-size="12.5" fill="#fbbf24" font-family="'SF Mono',Consolas,monospace">// Safari 答：我只支持 98(H264)，但 Chrome</text>
+    <text x="38" y="264" font-size="12.5" fill="#fbbf24" font-family="'SF Mono',Consolas,monospace">// 按 96 优先顺序排……协商不一定会选 H264</text>
+    <rect x="24" y="278" width="524" height="52" rx="8" fill="#111a30" stroke="#1e2a44"/>
+    <rect x="24" y="278" width="4" height="52" rx="2" fill="#f472b6"/>
+    <text x="40" y="300" font-size="13.5" fill="#e2e8f0">编解码器不兼容 → SDP 协商失败 → 黑屏 / 连接断开</text>
+    <text x="40" y="320" font-size="13.5" fill="#94a3b8">这是跨浏览器 WebRTC 开发最常见的第一关</text>
+  </g>
+
+  <!-- 面板 2 右上 · 揭秘 -->
+  <g transform="translate(608,84)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="400,0 480,0 80,361 0,361" fill="#a78bfa" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#a78bfa"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">2</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">揭秘：SDP 协商 + 编解码器优先级</text>
+    <g transform="translate(52,110)">
+      <rect x="-19" y="14" width="38" height="22" rx="9" fill="#f8fafc" stroke="#223055" stroke-width="1.5"/>
+      <circle cx="0" cy="-2" r="17" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+      <circle cx="-5" cy="0" r="1.8" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.8" fill="#0b1220"/>
+      <path d="M-4,5 q4,4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,100 74,106 88,112" fill="#f8fafc"/>
+    <rect x="88" y="82" width="400" height="52" rx="10" fill="#f8fafc"/>
+    <text x="102" y="104" font-size="15" fill="#0b1220">码叔：SDP 协商就像点菜——</text>
+    <text x="102" y="126" font-size="15" fill="#0b1220">双方各自报菜单，取交集</text>
+    <rect x="24" y="152" width="524" height="178" rx="8" fill="#0a0f1c" stroke="#a78bfa" stroke-opacity="0.35"/>
+    <text x="38" y="176" font-size="13" fill="#22d3ee">浏览器默认支持的视频编解码：</text>
+    <text x="52" y="200" font-size="12.5" fill="#e2e8f0" font-family="'SF Mono',Consolas,monospace">Chrome / Edge：VP8 ✅ VP9 ✅ H264 ✅ AV1 ✅</text>
+    <text x="52" y="220" font-size="12.5" fill="#e2e8f0" font-family="'SF Mono',Consolas,monospace">Firefox：VP8 ✅ VP9 ✅ AV1 ✅ H264 ✅</text>
+    <text x="52" y="240" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">Safari：H264 ✅ VP8 ❌ VP9 ❌ AV1 ❌</text>
+    <text x="38" y="266" font-size="13" fill="#22d3ee">音频编解码三家都用 Opus ✅</text>
+    <text x="38" y="290" font-size="13" fill="#a78bfa">所以跨浏览器**必须支持 H264**</text>
+    <text x="52" y="312" font-size="12.5" fill="#94a3b8" font-family="'SF Mono',Consolas,monospace">// Chrome 通过 codec 参数强制优先 H264：</text>
+    <text x="52" y="328" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">peerConnection.addTransceiver('video', { ..., sendEncodings })</text>
+  </g>
+
+  <!-- 面板 3 左下 · 实证 -->
+  <g transform="translate(20,462)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="100,0 30,0 500,361 570,361" fill="#34d399" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#fbbf24"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">3</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">实证：5G 上调 minBitrate + Simulcast</text>
+    <rect x="24" y="60" width="524" height="200" rx="8" fill="#0a0f1c" stroke="#fbbf24" stroke-opacity="0.35"/>
+    <text x="38" y="84" font-size="12.5" fill="#64748b" font-family="'SF Mono',Consolas,monospace">// 5G 带宽足，调高编码下限避免 GCC 压太狠</text>
+    <text x="38" y="106" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">const params = peerConnection.getSenders()[0].getParameters()</text>
+    <text x="38" y="126" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">params.encodings[0].minBitrate = 150_000  // 150kbps 底线</text>
+    <text x="38" y="146" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">params.encodings[0].maxBitrate = 4_000_000 // 4Mbps 上限</text>
+    <text x="38" y="166" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">peerConnection.getSenders()[0].setParameters(params)</text>
+    <text x="38" y="194" font-size="12.5" fill="#64748b" font-family="'SF Mono',Consolas,monospace">// Simulcast：一路推三层（H264 编码头要加 bframes=0）</text>
+    <text x="38" y="216" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">// Safari 不支持 Simulcast，必须降级成单层</text>
+    <text x="38" y="236" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">// Chrome addTransceiver('video', { sendEncodings: [</text>
+    <text x="52" y="256" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">//   { rid:'f', maxBitrate:4e6 }, // full</text>
+    <text x="52" y="272" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">//   { rid:'h', maxBitrate:1_500_000 }, // half</text>
+    <text x="52" y="288" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">//   { rid:'q', maxBitrate:600_000 }  // quarter</text>
+    <text x="52" y="304" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">// ] })</text>
+  </g>
+
+  <!-- 面板 4 右下 · 结案 -->
+  <g transform="translate(608,462)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="480,0 572,0 120,361 0,361" fill="#f97316" opacity="0.05"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#f97316"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">4</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">结案：跨浏览器编解码三条铁律</text>
+    <g transform="translate(52,95)">
+      <rect x="-19" y="14" width="38" height="22" rx="9" fill="#f97316"/>
+      <path d="M-5,18 L5,18 L3.5,27 L0,29 L-3.5,27 Z" fill="#f97316"/>
+      <circle cx="0" cy="-2" r="16" fill="#ffd9b3"/>
+      <path d="M-16,-2 L-11,-13 L-6,-4 L0,-14 L6,-4 L11,-13 L16,-2 Q0,-11 -16,-2 Z" fill="#f97316"/>
+      <circle cx="-5" cy="0" r="1.7" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.7" fill="#0b1220"/>
+      <path d="M-4,6 q4,-4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,85 74,91 88,97" fill="#f8fafc"/>
+    <rect x="88" y="67" width="420" height="58" rx="10" fill="#f8fafc"/>
+    <text x="102" y="90" font-size="15" fill="#0b1220">标签君：记牢码叔的三句话：</text>
+    <text x="102" y="112" font-size="15" fill="#0b1220">跨浏览器必支持 H264 + Safari 降级 + bframes=0</text>
+    <rect x="24" y="152" width="524" height="178" rx="8" fill="#0a0f1c" stroke="#f97316" stroke-opacity="0.35"/>
+    <rect x="34" y="162" width="62" height="22" rx="5" fill="#f97316"/>
+    <text x="65" y="178" text-anchor="middle" font-size="12" font-weight="bold" fill="#0b1220">⚠ 坑点</text>
+    <text x="38" y="204" font-size="13" fill="#f472b6">1. Safari 只认 H264</text>
+    <text x="52" y="226" font-size="12.5" fill="#94a3b8">Chrome addTransceiver 时强制 H264 优先，否则默认 VP8 排在最前</text>
+    <text x="38" y="252" font-size="13" fill="#f472b6">2. Simulcast 层数别硬来</text>
+    <text x="52" y="274" font-size="12.5" fill="#94a3b8">Safari 不支持 sendEncodings 的 rid 参数，检测 Safari 后降级成单层</text>
+    <text x="38" y="300" font-size="13" fill="#f472b6">3. H264 Profile 要加 bframes=0</text>
+    <text x="52" y="322" font-size="12.5" fill="#94a3b8">WebRTC 实时传输不用 B 帧（会增加 1~2 帧延迟），profile-level-id 要匹配</text>
+  </g>
+
+  <text x="1180" y="826" text-anchor="end" font-size="11" fill="#475569">NEON INK · webrtc-5g-tutorial · EP.03</text>
+</svg>

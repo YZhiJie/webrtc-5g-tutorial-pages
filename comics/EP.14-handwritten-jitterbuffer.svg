@@ -1,0 +1,182 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 840" font-family="'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#101a33"/>
+    </linearGradient>
+    <linearGradient id="titleGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f472b6"/>
+      <stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="840" fill="url(#bg)"/>
+  <polygon points="980,0 1060,0 760,840 680,840" fill="#f472b6" opacity="0.04"/>
+  <polygon points="150,0 220,0 1040,840 970,840" fill="#a78bfa" opacity="0.03"/>
+
+  <rect x="20" y="14" width="92" height="36" rx="9" fill="#7C3AED"/>
+  <text x="66" y="38" text-anchor="middle" font-size="18" font-weight="bold" fill="#ffffff">EP.14</text>
+  <text x="126" y="40" font-size="26" font-weight="bold" fill="url(#titleGrad)">乱序包排队进直播间</text>
+  <text x="1180" y="38" text-anchor="end" font-size="13" fill="#64748b">霓虹墨 NEON INK · webrtc-5g-tutorial</text>
+  <rect x="20" y="62" width="1160" height="2" rx="1" fill="url(#titleGrad)" opacity="0.6"/>
+
+  <!-- 面板 1 左上 · 困境 -->
+  <g transform="translate(20,84)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="380,0 450,0 120,361 50,361" fill="#f472b6" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#22d3ee"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">1</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">困境：网速不慢却卡成 PPT</text>
+
+    <!-- 标签君头像 -->
+    <g transform="translate(52,110)">
+      <rect x="-19" y="14" width="38" height="22" rx="9" fill="#f97316"/>
+      <path d="M-5,18 L5,18 L3.5,27 L0,29 L-3.5,27 Z" fill="#f97316"/>
+      <circle cx="0" cy="-2" r="16" fill="#ffd9b3"/>
+      <path d="M-16,-2 L-11,-13 L-6,-4 L0,-14 L6,-4 L11,-13 L16,-2 Q0,-11 -16,-2 Z" fill="#f97316"/>
+      <circle cx="-5" cy="0" r="1.7" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.7" fill="#0b1220"/>
+      <path d="M-4,6 q4,-4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,100 74,106 88,112" fill="#f8fafc"/>
+    <rect x="88" y="70" width="400" height="70" rx="10" fill="#f8fafc"/>
+    <text x="102" y="92" font-size="15" fill="#0b1220">标签君：测速 100Mbps、RTT 30ms，</text>
+    <text x="102" y="114" font-size="15" fill="#0b1220">直播画面却一顿一顿，声音还</text>
+    <text x="102" y="134" font-size="15" fill="#f472b6">先出后入…到底哪里卡了？</text>
+
+    <!-- 乱序到达示意 -->
+    <rect x="24" y="156" width="524" height="116" rx="8" fill="#0a0f1c" stroke="#f472b6" stroke-opacity="0.35"/>
+    <text x="38" y="178" font-size="12.5" fill="#64748b" font-family="'SF Mono',Consolas,monospace">// 发送端每 20ms 发一包，到接收端全乱了</text>
+    <text x="38" y="200" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">发送：seq 0 1 2 3 4 5（间隔 20ms）</text>
+    <text x="38" y="222" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">到达：seq 0 2 1 4 ✗ 3 ← 乱序+抖动+丢包</text>
+    <text x="38" y="244" font-size="12.5" fill="#fbbf24" font-family="'SF Mono',Consolas,monospace">播放：不等齐就播 → 卡成 PPT</text>
+
+    <!-- 结论条 -->
+    <rect x="24" y="286" width="524" height="52" rx="8" fill="#111a30" stroke="#1e2a44"/>
+    <rect x="24" y="286" width="4" height="52" rx="2" fill="#f472b6"/>
+    <text x="40" y="308" font-size="13.5" fill="#e2e8f0">抖动 ≠ 延迟大——是延迟不稳定，相邻包到达间隔忽长忽短</text>
+    <text x="40" y="328" font-size="13.5" fill="#94a3b8">不先缓冲重排，匀速播放就无从谈起</text>
+  </g>
+
+  <!-- 面板 2 右上 · 揭秘 -->
+  <g transform="translate(608,84)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="400,0 480,0 80,361 0,361" fill="#a78bfa" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#a78bfa"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">2</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">揭秘：排队重排再播放</text>
+
+    <!-- 码叔头像 -->
+    <g transform="translate(52,110)">
+      <circle cx="0" cy="-2" r="17" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+      <circle cx="-5" cy="0" r="1.8" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.8" fill="#0b1220"/>
+      <circle cx="-5" cy="0" r="6" fill="none" stroke="#0b1220" stroke-width="1.2"/>
+      <circle cx="5" cy="0" r="6" fill="none" stroke="#0b1220" stroke-width="1.2"/>
+      <path d="M-4,5 q4,4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,100 74,106 88,112" fill="#f8fafc"/>
+    <rect x="88" y="82" width="400" height="52" rx="10" fill="#f8fafc"/>
+    <text x="102" y="104" font-size="15" fill="#0b1220">码叔：Jitter Buffer 就干三件事——</text>
+    <text x="102" y="126" font-size="15" fill="#0b1220">重排、消抖、控延迟。</text>
+
+    <!-- 流程图 -->
+    <rect x="24" y="152" width="524" height="186" rx="8" fill="#0a0f1c" stroke="#f472b6" stroke-opacity="0.35"/>
+    <text x="38" y="176" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">乱序到达  seq=5   seq=7   seq=4   seq=6</text>
+    <text x="38" y="196" font-size="12.5" fill="#94a3b8" font-family="'SF Mono',Consolas,monospace">   ↓ push()：按 seq 落位，重复包丢弃</text>
+    <text x="38" y="216" font-size="12.5" fill="#a78bfa" font-family="'SF Mono',Consolas,monospace">┌─ Map&lt;seq, pkt&gt; ────────────┐</text>
+    <text x="38" y="236" font-size="12.5" fill="#34d399" font-family="'SF Mono',Consolas,monospace">│   4 ✓   5 ✓   6 ✓   7 ✓    │ ← 重排完成</text>
+    <text x="38" y="256" font-size="12.5" fill="#a78bfa" font-family="'SF Mono',Consolas,monospace">└────────────────────────────┘</text>
+    <text x="38" y="276" font-size="12.5" fill="#94a3b8" font-family="'SF Mono',Consolas,monospace">   ↓ getFrame(now - depth)：到期才放行</text>
+    <text x="38" y="296" font-size="12.5" fill="#34d399" font-family="'SF Mono',Consolas,monospace">匀速输出  4 → 5 → 6 → 7（每 20ms 一帧）</text>
+    <text x="38" y="318" font-size="12.5" fill="#fbbf24" font-family="'SF Mono',Consolas,monospace">J += (|D| - J) / 16   // RFC 3550 抖动估计</text>
+  </g>
+
+  <!-- 面板 3 左下 · 实证 -->
+  <g transform="translate(20,462)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="100,0 30,0 500,361 570,361" fill="#f472b6" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#f472b6"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">3</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">实证：100 帧模拟扫深度</text>
+
+    <!-- 像素酱头像 -->
+    <g transform="translate(52,95)">
+      <circle cx="0" cy="-2" r="17" fill="#ffd9b3"/>
+      <path d="M12,-8 Q24,0 18,12" fill="#22d3ee"/>
+      <path d="M-16,-6 Q-8,-18 0,-20 Q10,-18 16,-6 Q0,-12 -16,-6 Z" fill="#22d3ee"/>
+      <circle cx="-5" cy="0" r="1.8" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.8" fill="#0b1220"/>
+      <path d="M-4,5 q4,4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,85 74,91 88,97" fill="#f8fafc"/>
+    <rect x="88" y="67" width="420" height="44" rx="10" fill="#f8fafc"/>
+    <text x="102" y="90" font-size="15" fill="#0b1220">像素酱：Node 模拟器跑 100 帧，</text>
+    <text x="102" y="110" font-size="15" fill="#0b1220">深度从 60ms 扫到 400ms——</text>
+
+    <!-- 深度对比条 -->
+    <rect x="24" y="126" width="524" height="212" rx="8" fill="#0a0f1c" stroke="#f472b6" stroke-opacity="0.35"/>
+    <text x="38" y="150" font-size="13" fill="#e2e8f0">固定深度扫描（5% 丢包 + 20% 乱序，seed 固定）：</text>
+
+    <text x="38" y="176" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">深度 60ms</text>
+    <rect x="150" y="164" width="300" height="14" rx="3" fill="#1e2a44"/>
+    <rect x="150" y="164" width="280" height="14" rx="3" fill="#f472b6"/>
+    <text x="520" y="176" font-size="12.5" fill="#f472b6" text-anchor="end">停顿 480ms ⚠</text>
+
+    <text x="38" y="202" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">深度 120ms</text>
+    <rect x="150" y="190" width="300" height="14" rx="3" fill="#1e2a44"/>
+    <rect x="150" y="190" width="245" height="14" rx="3" fill="#f472b6"/>
+    <text x="520" y="202" font-size="12.5" fill="#f472b6" text-anchor="end">停顿 420ms ⚠</text>
+
+    <text x="38" y="228" font-size="12.5" fill="#34d399" font-family="'SF Mono',Consolas,monospace">深度 220ms</text>
+    <rect x="150" y="216" width="300" height="14" rx="3" fill="#1e2a44"/>
+    <rect x="150" y="216" width="58" height="14" rx="3" fill="#34d399"/>
+    <text x="520" y="228" font-size="12.5" fill="#34d399" text-anchor="end">停顿 100ms ✅</text>
+
+    <text x="38" y="254" font-size="12.5" fill="#fbbf24" font-family="'SF Mono',Consolas,monospace">深度 400ms</text>
+    <rect x="150" y="242" width="300" height="14" rx="3" fill="#1e2a44"/>
+    <rect x="150" y="242" width="12" height="14" rx="3" fill="#fbbf24"/>
+    <text x="520" y="254" font-size="12.5" fill="#fbbf24" text-anchor="end">不卡但延迟爆表 ❌</text>
+
+    <text x="38" y="284" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">// 实测抖动 J=60.2ms → 建议深度 200ms</text>
+    <text x="38" y="306" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">depth = clamp(base + 4 × J, min, max)</text>
+    <text x="38" y="328" font-size="13" fill="#94a3b8">太浅断粮卡顿，太深延迟爆炸——按 J 自适应尾随</text>
+  </g>
+
+  <!-- 面板 4 右下 · 结案 -->
+  <g transform="translate(608,462)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="480,0 572,0 120,361 0,361" fill="#f97316" opacity="0.05"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#f97316"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">4</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">结案：缓冲三纪律</text>
+
+    <!-- 码叔头像 -->
+    <g transform="translate(52,95)">
+      <circle cx="0" cy="-2" r="17" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+      <circle cx="-5" cy="0" r="1.8" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.8" fill="#0b1220"/>
+      <circle cx="-5" cy="0" r="6" fill="none" stroke="#0b1220" stroke-width="1.2"/>
+      <circle cx="5" cy="0" r="6" fill="none" stroke="#0b1220" stroke-width="1.2"/>
+      <path d="M-4,5 q4,4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,85 74,91 88,97" fill="#f8fafc"/>
+    <rect x="88" y="67" width="420" height="58" rx="10" fill="#f8fafc"/>
+    <text x="102" y="90" font-size="15" fill="#0b1220">码叔总结：缓冲是拿延迟换流畅，</text>
+    <text x="102" y="112" font-size="15" fill="#0b1220">按序放行、宁缺毋滥、见好就收。</text>
+
+    <rect x="24" y="145" width="524" height="190" rx="8" fill="#0a0f1c" stroke="#f97316" stroke-opacity="0.35"/>
+    <rect x="34" y="155" width="62" height="22" rx="5" fill="#f97316"/>
+    <text x="65" y="171" text-anchor="middle" font-size="12" font-weight="bold" fill="#0b1220">⚠ 坑点</text>
+
+    <text x="38" y="198" font-size="13" fill="#f472b6">1. 音频 buffer 别照抄视频逻辑</text>
+    <text x="52" y="218" font-size="12.5" fill="#94a3b8">—— 音频小包独立解码、NetEq 会加减速；视频要按帧组装</text>
+
+    <text x="38" y="248" font-size="13" fill="#f472b6">2. 帧未齐不要强行播放</text>
+    <text x="52" y="268" font-size="12.5" fill="#94a3b8">—— 视频一帧分多包（FU-A），缺包硬解码 = 花屏</text>
+
+    <text x="38" y="298" font-size="13" fill="#f472b6">3. NACK 等太久会错过播放时点</text>
+    <text x="52" y="318" font-size="12.5" fill="#94a3b8">—— 重传等够 maxWaitMs 就判丢跳过，死等更卡</text>
+  </g>
+
+  <text x="1180" y="826" text-anchor="end" font-size="11" fill="#475569">NEON INK · webrtc-5g-tutorial · EP.14</text>
+</svg>

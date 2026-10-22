@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head><title>WebRTC × 5G 环境自检</title></head>
+<body>
+<h2>🔍 WebRTC 环境自检</h2>
+<pre id="output"></pre>
+<script>
+const log = (msg, ok) => {
+  const mark = ok === true ? '✅' : ok === false ? '❌' : 'ℹ️'
+  output.textContent += `${mark} ${msg}\n`
+}
+
+// 1. 安全上下文
+log(`安全上下文: ${window.isSecureContext}`, window.isSecureContext)
+log(`当前协议: ${location.protocol}`)
+
+// 2. WebRTC API
+log(`RTCPeerConnection: ${typeof RTCPeerConnection === 'function'}`, !!window.RTCPeerConnection)
+log(`getUserMedia: ${!!navigator.mediaDevices?.getUserMedia}`)
+log(`getDisplayMedia: ${!!navigator.mediaDevices?.getDisplayMedia}`)
+
+// 3. 网络信息
+const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection
+if (conn) {
+  log(`有效连接类型: ${conn.effectiveType}`) // slow-2g / 2g / 3g / 4g
+  log(`下行带宽估算: ${conn.downlink} Mbps`)
+  log(`往返时间: ${conn.rtt} ms`)
+  log(`数据节省模式: ${conn.saveData}`)
+  // 5G 探测：effectiveType === '4g' 且 downlink >= 50
+  const likely5g = conn.effectiveType === '4g' && conn.downlink >= 50 && conn.rtt < 30
+  log(`可能是 5G? ${likely5g}（启发式，非 100% 准确）`)
+} else {
+  log('Network Information API 不可用（Safari 不支持）')
+}
+
+// 4. 编解码能力
+const pc = new RTCPeerConnection({ iceServers: [] })
+const transceivers = pc.getTransceivers()
+log(`当前 PeerConnection transceivers: ${transceivers.length}`)
+pc.close()
+
+log('\n📝 检测完成！', true)
+</script>
+</body>
+</html>

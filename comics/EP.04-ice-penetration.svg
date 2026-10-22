@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 840" font-family="'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#101a33"/>
+    </linearGradient>
+    <linearGradient id="titleGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="840" fill="url(#bg)"/>
+  <polygon points="980,0 1060,0 760,840 680,840" fill="#22d3ee" opacity="0.04"/>
+  <polygon points="150,0 220,0 1040,840 970,840" fill="#a78bfa" opacity="0.03"/>
+
+  <rect x="20" y="14" width="92" height="36" rx="9" fill="#7C3AED"/>
+  <text x="66" y="38" text-anchor="middle" font-size="18" font-weight="bold" fill="#ffffff">EP.04</text>
+  <text x="126" y="40" font-size="26" font-weight="bold" fill="url(#titleGrad)">两个 NAT 背后的人怎么握手</text>
+  <text x="1180" y="38" text-anchor="end" font-size="13" fill="#64748b">霓虹墨 NEON INK · webrtc-5g-tutorial</text>
+  <rect x="20" y="62" width="1160" height="2" rx="1" fill="url(#titleGrad)" opacity="0.6"/>
+
+  <!-- 面板 1 左上 · 困境 -->
+  <g transform="translate(20,84)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="380,0 450,0 120,361 50,361" fill="#22d3ee" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#22d3ee"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">1</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">困境：两边 Chrome 打开 Demo 连不上</text>
+    <g transform="translate(52,110)">
+      <rect x="-19" y="14" width="38" height="22" rx="9" fill="#f97316"/>
+      <path d="M-5,18 L5,18 L3.5,27 L0,29 L-3.5,27 Z" fill="#f97316"/>
+      <circle cx="0" cy="-2" r="16" fill="#ffd9b3"/>
+      <path d="M-16,-2 L-11,-13 L-6,-4 L0,-14 L6,-4 L11,-13 L16,-2 Q0,-11 -16,-2 Z" fill="#f97316"/>
+      <circle cx="-5" cy="0" r="1.7" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.7" fill="#0b1220"/>
+      <path d="M-4,6 q4,-4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,100 74,106 88,112" fill="#f8fafc"/>
+    <rect x="88" y="82" width="400" height="66" rx="10" fill="#f8fafc"/>
+    <text x="102" y="104" font-size="15" fill="#0b1220">标签君：两个 Chrome 窗口跑同一份</text>
+    <text x="102" y="126" font-size="15" fill="#0b1220">Demo，iceConnectionState 一直是</text>
+    <text x="102" y="146" font-size="14" fill="#f472b6">"failed"，完全不通</text>
+    <rect x="24" y="162" width="524" height="100" rx="8" fill="#0a0f1c" stroke="#22d3ee" stroke-opacity="0.35"/>
+    <text x="38" y="184" font-size="12.5" fill="#64748b" font-family="'SF Mono',Consolas,monospace">// 标签君以为 WebRTC = 100% P2P</text>
+    <text x="38" y="206" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">// 结果……两个 NAT 背后的设备根本互相看不见</text>
+    <text x="38" y="228" font-size="12.5" fill="#fbbf24" font-family="'SF Mono',Consolas,monospace">pc.iceConnectionState = 'failed'</text>
+    <text x="38" y="248" font-size="12.5" fill="#94a3b8" font-family="'SF Mono',Consolas,monospace">// 原因：NAT 防火墙把外网来的 UDP 包挡了</text>
+    <text x="38" y="264" font-size="12.5" fill="#94a3b8" font-family="'SF Mono',Consolas,monospace">// 需要 STUN/TURN 帮忙穿透</text>
+    <rect x="24" y="278" width="524" height="52" rx="8" fill="#111a30" stroke="#1e2a44"/>
+    <rect x="24" y="278" width="4" height="52" rx="2" fill="#34d399"/>
+    <text x="40" y="300" font-size="13.5" fill="#e2e8f0">浏览器内网 IP（192.168.x.x）彼此不可达，必须借外力穿透 NAT</text>
+    <text x="40" y="320" font-size="13.5" fill="#94a3b8">这才是 WebRTC 真正难的地方——媒体管线简单，网络穿透难</text>
+  </g>
+
+  <!-- 面板 2 右上 · 揭秘 -->
+  <g transform="translate(608,84)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="400,0 480,0 80,361 0,361" fill="#a78bfa" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#a78bfa"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">2</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">揭秘：NAT 4 种 + 候选优先级</text>
+    <g transform="translate(52,110)">
+      <rect x="-19" y="14" width="38" height="22" rx="9" fill="#f8fafc" stroke="#223055" stroke-width="1.5"/>
+      <circle cx="0" cy="-2" r="17" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+      <circle cx="-5" cy="0" r="1.8" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.8" fill="#0b1220"/>
+      <path d="M-4,5 q4,4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,100 74,106 88,112" fill="#f8fafc"/>
+    <rect x="88" y="82" width="400" height="52" rx="10" fill="#f8fafc"/>
+    <text x="102" y="104" font-size="15" fill="#0b1220">码叔：ICE 会收集四类候选，</text>
+    <text x="102" y="126" font-size="15" fill="#0b1220">按优先级从高到低尝试连通</text>
+    <rect x="24" y="152" width="524" height="178" rx="8" fill="#0a0f1c" stroke="#a78bfa" stroke-opacity="0.35"/>
+    <text x="38" y="176" font-size="13" fill="#22d3ee">候选优先级（高 → 低）：</text>
+    <text x="52" y="200" font-size="12.5" fill="#22d3ee" font-family="'SF Mono',Consolas,monospace">① Host  —— 本机内网 IP（同局域网必中！）</text>
+    <text x="52" y="222" font-size="12.5" fill="#fbbf24" font-family="'SF Mono',Consolas,monospace">② SRFLX —— STUN 反射 IP（对称 NAT 不中）</text>
+    <text x="52" y="244" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">③ PRFLX —— STUN Ping 出来的临时候选</text>
+    <text x="52" y="266" font-size="12.5" fill="#34d399" font-family="'SF Mono',Consolas,monospace">④ Relayed —— TURN 中继 IP（最后兜底）</text>
+    <text x="38" y="292" font-size="13" fill="#a78bfa">NAT 类型四档：</text>
+    <text x="52" y="314" font-size="12.5" fill="#94a3b8" font-family="'SF Mono',Consolas,monospace">Full Cone ❀ Restricted ❀ Port-Restricted ❀ Symmetric</text>
+    <text x="52" y="328" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">运营商 NAT 基本是 Symmetric → 必须 TURN</text>
+  </g>
+
+  <!-- 面板 3 左下 · 实证 -->
+  <g transform="translate(20,462)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="100,0 30,0 500,361 570,361" fill="#34d399" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#34d399"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">3</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">实证：STUN vs TURN 延迟对比</text>
+    <rect x="24" y="60" width="524" height="160" rx="8" fill="#0a0f1c" stroke="#34d399" stroke-opacity="0.35"/>
+    <text x="38" y="84" font-size="13.5" fill="#e2e8f0">WebRTC 连接建立后，看 candidate pair 延迟：</text>
+    <text x="38" y="110" font-size="13" fill="#22d3ee">STUN（SRFLX）直接打通 P2P：</text>
+    <rect x="100" y="98" width="380" height="14" rx="3" fill="#1e2a44"/>
+    <rect x="100" y="98" width="76" height="14" rx="3" fill="#22d3ee"/>
+    <text x="488" y="110" font-size="12.5" fill="#22d3ee" text-anchor="end">30~80ms ✅</text>
+    <text x="38" y="136" font-size="13" fill="#f472b6">TURN（Relayed）经中继服务器：</text>
+    <rect x="100" y="124" width="380" height="14" rx="3" fill="#1e2a44"/>
+    <rect x="100" y="124" width="228" height="14" rx="3" fill="#f472b6"/>
+    <text x="488" y="136" font-size="12.5" fill="#f472b6" text-anchor="end">150~300ms ⚠</text>
+    <text x="38" y="162" font-size="13" fill="#fbbf24">同局域网（Host 直连）：</text>
+    <rect x="100" y="150" width="380" height="14" rx="3" fill="#1e2a44"/>
+    <rect x="100" y="150" width="38" height="14" rx="3" fill="#fbbf24"/>
+    <text x="488" y="162" font-size="12.5" fill="#fbbf24" text-anchor="end">5~15ms 🏆</text>
+    <text x="38" y="184" font-size="13" fill="#94a3b8">// Chrome webrtc-internals 看 currentCandidatePair</text>
+    <text x="38" y="204" font-size="13" fill="#94a3b8">// 如果发现一直走 relayed，说明 STUN 没穿透成功</text>
+    <rect x="24" y="230" width="524" height="100" rx="8" fill="#0a0f1c" stroke="#34d399" stroke-opacity="0.35"/>
+    <text x="38" y="254" font-size="13.5" fill="#34d399">推荐 STUN 服务器（免费）：</text>
+    <text x="52" y="276" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">stun:stun.l.google.com:19302</text>
+    <text x="52" y="296" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">stun:stun1.l.google.com:19302</text>
+    <text x="52" y="314" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">// TURN 必须自建（coturn / pion），或用第三方（Twilio / Metered）</text>
+  </g>
+
+  <!-- 面板 4 右下 · 结案 -->
+  <g transform="translate(608,462)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="480,0 572,0 120,361 0,361" fill="#f97316" opacity="0.05"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#f97316"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">4</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">结案：穿透三件套</text>
+    <g transform="translate(52,95)">
+      <circle cx="0" cy="-2" r="16" fill="#ffd9b3"/>
+      <path d="M-16,-2 L-11,-13 L-6,-4 L0,-14 L6,-4 L11,-13 L16,-2 Q0,-11 -16,-2 Z" fill="#22d3ee"/>
+      <path d="M-16,-6 Q-22,-2 -16,2 M-14,-8 Q-14,-16 -6,-16 M6,-16 Q14,-16 14,-8" stroke="#22d3ee" stroke-width="3" fill="none"/>
+      <circle cx="-5" cy="0" r="1.7" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.7" fill="#0b1220"/>
+      <path d="M-4,6 q4,-4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,85 74,91 88,97" fill="#f8fafc"/>
+    <rect x="88" y="67" width="420" height="58" rx="10" fill="#f8fafc"/>
+    <text x="102" y="90" font-size="15" fill="#0b1220">像素酱：穿透的口诀是——</text>
+    <text x="102" y="112" font-size="15" fill="#0b1220">Host 优先 → STUN 试试 → TURN 兜底</text>
+    <rect x="24" y="152" width="524" height="178" rx="8" fill="#0a0f1c" stroke="#f97316" stroke-opacity="0.35"/>
+    <rect x="34" y="162" width="62" height="22" rx="5" fill="#f97316"/>
+    <text x="65" y="178" text-anchor="middle" font-size="12" font-weight="bold" fill="#0b1220">⚠ 坑点</text>
+    <text x="38" y="204" font-size="13" fill="#f472b6">1. 运营商对称 NAT → 必须 TURN</text>
+    <text x="52" y="226" font-size="12.5" fill="#94a3b8">移动/电信/联通都是 Symmetric NAT，STUN 大概率不中，必须备 TURN</text>
+    <text x="38" y="252" font-size="13" fill="#f472b6">2. 同局域网 Host 直连最快</text>
+    <text x="52" y="274" font-size="12.5" fill="#94a3b8">手机连公司 WiFi 和同事手机开 WebRTC，大概率走 Host，延迟 10ms 以内</text>
+    <text x="38" y="300" font-size="13" fill="#f472b6">3. Trickle ICE 别关</text>
+    <text x="52" y="322" font-size="12.5" fill="#94a3b8">默认就是开的，关了就得等所有候选都收集完才协商，连接时间翻倍</text>
+  </g>
+
+  <text x="1180" y="826" text-anchor="end" font-size="11" fill="#475569">NEON INK · webrtc-5g-tutorial · EP.04</text>
+</svg>

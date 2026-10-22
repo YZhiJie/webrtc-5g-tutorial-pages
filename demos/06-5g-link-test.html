@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>📊 5G WebRTC 链路实测</h2>
+<pre id="output">测量中...</pre>
+
+<script>
+const output = document.getElementById('output')
+let pc, stream
+
+function log(msg) { output.textContent += msg + '\n' }
+
+async function measure() {
+  log('========== WebRTC × 5G 链路实测 ==========')
+  log('时间: ' + new Date().toISOString())
+  log('')
+
+  // 1. 网络信息
+  const conn = navigator.connection
+  if (conn) {
+    log('📶 网络信息:')
+    log(`  effectiveType: ${conn.effectiveType} (4g ≈ 5G/LTE-A Pro)`)
+    log(`  downlink: ${conn.downlink} Mbps`)
+    log(`  rtt: ${conn.rtt} ms`)
+    log(`  saveData: ${conn.saveData}`)
+
+    const likely5g = conn.effectiveType === '4g' && conn.downlink >= 50 && conn.rtt < 30
+    log(`  启发式 5G 判定: ${likely5g ? '✅ 很可能是 5G' : '❌ 可能是 4G'}`)
+    log('')
+  }
+
+  // 2. 采集延迟
+  const t0 = performance.now()
+  stream = await navigator.mediaDevices.getUserMedia({ video: true })
+  const t1 = performance.now()
+  log(`🎥 采集耗时: ${(t1 - t0).toFixed(2)} ms`)
+
+  // 3. PeerConnection 延迟（ICE 候选收集）
+  pc = new RTCPeerConnection({
+    iceServers: [
+      { urls: 'stun:stun.l.google.com:19302' },
+      { urls: 'stun:stun1.l.google.com:19302' },
+    ]
+  })
+  stream.getTracks().forEach(t => pc.addTrack(t, stream))
+
+  const t2 = performance.now()
+  const offer = await pc.createOffer()
+  await pc.setLocalDescription(offer)
+  const t3 = performance.now()
+  log(`📝 Offer 生成耗时: ${(t3 - t2).toFixed(2)} ms`)
+
+  // 4. ICE 候选
+  const candidates = []
+  pc.addEventListener('icecandidate', (e) => {
+    if (e.candidate) {
+      candidates.push({
+        type: e.candidate.type,
+        protocol: e.candidate.protocol,
+        priority: e.candidate.priority,
+      })
+    }
+  })
+
+  setTimeout(() => {
+    log(`❄️ ICE 候选数量: ${candidates.length}`)
+    candidates.forEach(c => log(`  · ${c.type} (${c.protocol}, priority=${c.priority})`))
+
+    // 5. 编码器统计
+    setTimeout(async () => {
+      const stats = await pc.getStats()
+      log('')
+      log('📊 发送端统计:')
+      stats.forEach(r => {
+        if (r.type === 'outbound-rtp' && r.kind === 'video') {
+          log(`  编码器: ${r.encoderId}`)
+          log(`  发送码率: ${((r.bytesSent * 8) / 1_000_000).toFixed(2)} Mbps`)
+          log(`  分辨率: ${r.frameWidth}×${r.frameHeight}`)
+          log(`  帧率: ${r.framesPerSecond}`)
+          log(`  实际编码目标码率: ${r.targetBitrate} bps`)
+        }
+      })
+
+      stream.getTracks().forEach(t => t.stop())
+      pc.close()
+      log('')
+      log('✅ 测量完成！')
+    }, 1000)
+  }, 3000)
+}
+
+measure().catch(err => {
+  document.body.innerHTML += `<p style="color:red">错误: ${err.message}</p>`
+})
+</script>
+</body>
+</html>

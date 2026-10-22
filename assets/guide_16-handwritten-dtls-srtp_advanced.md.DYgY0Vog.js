@@ -1,0 +1,107 @@
+import{_ as a,o as n,c as t,a2 as p}from"./chunks/framework.B4hAkGey.js";const g=JSON.parse('{"title":"16.2 进阶应用：证书指纹、密钥导出与 SRTP KDF","description":"","frontmatter":{},"headers":[],"relativePath":"guide/16-handwritten-dtls-srtp/advanced.md","filePath":"guide/16-handwritten-dtls-srtp/advanced.md","lastUpdated":1792683941000}'),e={name:"guide/16-handwritten-dtls-srtp/advanced.md"};function i(l,s,d,r,o,c){return n(),t("div",null,[...s[0]||(s[0]=[p(`<h1 id="_16-2-进阶应用-证书指纹、密钥导出与-srtp-kdf" tabindex="-1">16.2 进阶应用：证书指纹、密钥导出与 SRTP KDF <a class="header-anchor" href="#_16-2-进阶应用-证书指纹、密钥导出与-srtp-kdf" aria-label="Permalink to &quot;16.2 进阶应用：证书指纹、密钥导出与 SRTP KDF&quot;">​</a></h1><blockquote><p>DTLS 握手跑完只是拿到了&quot;原料密钥&quot;，离真正加密 RTP 包还差三步：用 SDP 指纹验证证书身份、用 TLS Exporter 导出 master key/salt、用 SRTP KDF 派生出 session key。本章把这三步的密码学细节全部拆开，最后讲清 AES-CM 加密、HMAC-SHA1 认证和重放保护的具体构造。</p></blockquote><hr><h2 id="_16-2-1-证书指纹验证-没有-ca-怎么确认身份" tabindex="-1">16.2.1 证书指纹验证：没有 CA 怎么确认身份 <a class="header-anchor" href="#_16-2-1-证书指纹验证-没有-ca-怎么确认身份" aria-label="Permalink to &quot;16.2.1 证书指纹验证：没有 CA 怎么确认身份&quot;">​</a></h2><p>回忆基础篇：WebRTC 的 DTLS 证书是<strong>自签名</strong>的，不走 CA 信任链。那中间人（MITM, Man-in-the-Middle）岂不是可以替换证书？</p><p>防线在<strong>信令通道</strong>。SDP 交换时（通过你自己的信令服务器，通常走 HTTPS/WSS），双方会把证书的哈希指纹写进 SDP：</p><div class="language-sdp vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">sdp</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span>a=fingerprint:sha-256 \\</span></span>
+<span class="line"><span>  7C:93:CF:8E:9C:2A:54:F1:E9:0E:4D:6B:A5:8B:3C:1F:\\</span></span>
+<span class="line"><span>  2D:9E:7B:60:41:8A:F3:C5:D2:E1:90:B4:A6:C8:3D:72</span></span></code></pre></div><p>DTLS 握手中收到对方 Certificate 后，验证流程：</p><div class="language- vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span>收到的证书 DER 编码</span></span>
+<span class="line"><span>      │</span></span>
+<span class="line"><span>      ▼</span></span>
+<span class="line"><span>SHA-256(证书DER) ──&gt; 计算出的指纹</span></span>
+<span class="line"><span>      │</span></span>
+<span class="line"><span>      ▼</span></span>
+<span class="line"><span> 与 SDP a=fingerprint 中的值逐字节比较</span></span>
+<span class="line"><span>      │</span></span>
+<span class="line"><span>  ┌───┴───┐</span></span>
+<span class="line"><span>  相等     不等</span></span>
+<span class="line"><span>   │        │</span></span>
+<span class="line"><span>   ▼        ▼</span></span>
+<span class="line"><span> 继续握手  立即中止，报警&quot;可能遭受 MITM 攻击&quot;</span></span></code></pre></div><p><strong>安全性归约</strong>：</p><div class="language- vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span>攻击者要成功 MITM，必须同时做到：</span></span>
+<span class="line"><span>  1. 在 DTLS 层替换证书          ← 容易（网络层）</span></span>
+<span class="line"><span>  2. 在信令层替换 SDP 指纹        ← 需要攻破信令通道（HTTPS/WSS）</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>结论：DTLS-SRTP 的安全性 = 信令通道的安全性</span></span></code></pre></div><p>这就是 WebRTC 安全模型的核心：<strong>媒体层把信任锚定（Trust Anchoring）外包给了信令层</strong>。只要你的信令走了 TLS，攻击者就无法同时伪造两条通道里的内容。</p><p>指纹计算本身非常简单（Node.js 一行）：</p><div class="language-js vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">js</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">const</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;"> fingerprint</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> crypto.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">createHash</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">&#39;sha256&#39;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">update</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(certDER).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">digest</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">&#39;hex&#39;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">)</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D;">// 按 RFC 4572 格式化成 &quot;AB:CD:EF:...&quot; 大写冒号分隔</span></span></code></pre></div><hr><h2 id="_16-2-2-tls-exporter-从-dtls-会话导出-srtp-原料" tabindex="-1">16.2.2 TLS Exporter：从 DTLS 会话导出 SRTP 原料 <a class="header-anchor" href="#_16-2-2-tls-exporter-从-dtls-会话导出-srtp-原料" aria-label="Permalink to &quot;16.2.2 TLS Exporter：从 DTLS 会话导出 SRTP 原料&quot;">​</a></h2><p>DTLS 握手完成后，双方各自拥有相同的 <code>master_secret</code>（48 字节）。按 RFC 5764，用 <strong>TLS Exporter</strong>（RFC 5705）从中导出 SRTP 密钥材料：</p><div class="language- vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span>keying_material = PRF(master_secret,</span></span>
+<span class="line"><span>                      &quot;EXTRACTOR-dtls_srtp&quot;,   ← label（固定字符串）</span></span>
+<span class="line"><span>                      client_random + server_random,</span></span>
+<span class="line"><span>                      60 字节)                  ← AES-128_CM 时的长度</span></span></code></pre></div><p>切分规则（基础篇已给出）：</p><div class="language- vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span>[0:16]  client_master_key     (16 字节, AES-128)</span></span>
+<span class="line"><span>[16:30] client_master_salt    (14 字节)</span></span>
+<span class="line"><span>[30:46] server_master_key     (16 字节)</span></span>
+<span class="line"><span>[46:60] server_master_salt    (14 字节)</span></span></code></pre></div><table tabindex="0"><thead><tr><th>参数</th><th>AES-128_CM</th><th>AES-256_CM</th></tr></thead><tbody><tr><td>master key 长度</td><td>16 字节</td><td>32 字节</td></tr><tr><td>master salt 长度</td><td>14 字节</td><td>14 字节</td></tr><tr><td>导出总长度</td><td>60 字节</td><td>88 字节</td></tr></tbody></table><p>注意：<strong>这 16 字节的 master key 还不是直接给 AES 用的密钥</strong>。它只是 SRTP KDF 的输入种子。</p><hr><h2 id="_16-2-3-srtp-kdf-一份种子派生三把钥匙" tabindex="-1">16.2.3 SRTP KDF：一份种子派生三把钥匙 <a class="header-anchor" href="#_16-2-3-srtp-kdf-一份种子派生三把钥匙" aria-label="Permalink to &quot;16.2.3 SRTP KDF：一份种子派生三把钥匙&quot;">​</a></h2><p>SRTP（RFC 3711 Section 4.3）需要一个<strong>密钥派生函数（Key Derivation Function, KDF）</strong>，从 master key/salt 为每种用途各派生一把会话密钥。默认 KDF 基于 <strong>AES-CM 伪随机函数（PRF, Pseudo-Random Function）</strong>。</p><h3 id="派生公式" tabindex="-1">派生公式 <a class="header-anchor" href="#派生公式" aria-label="Permalink to &quot;派生公式&quot;">​</a></h3><p>对每种标签（label），计算：</p><div class="language- vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span>session_key_for_label = AES-CM-PRF(master_key, master_salt, label, index)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>具体构造：</span></span>
+<span class="line"><span>  x = (label &lt;&lt; 48) XOR (key_derivation_rate 相关项)   ← 当 kdr=0 时简化为 label &lt;&lt; 48</span></span>
+<span class="line"><span>  IV = (master_salt XOR (x 左移 16 位))  padded to 16 字节</span></span>
+<span class="line"><span>  session_key = AES-CTR-Encrypt(master_key, IV, 全零明文, 所需长度)</span></span></code></pre></div><h3 id="六种派生标签" tabindex="-1">六种派生标签 <a class="header-anchor" href="#六种派生标签" aria-label="Permalink to &quot;六种派生标签&quot;">​</a></h3><table tabindex="0"><thead><tr><th>Label (hex)</th><th>派生物</th><th>长度</th><th>用途</th></tr></thead><tbody><tr><td><code>0x00</code></td><td><strong>SRTP 加密密钥</strong> (session encryption key)</td><td>16 字节</td><td>AES-CM 加密 RTP payload</td></tr><tr><td><code>0x01</code></td><td><strong>SRTP 认证密钥</strong> (session authentication key)</td><td>20 字节</td><td>HMAC-SHA1 的密钥</td></tr><tr><td><code>0x02</code></td><td><strong>SRTP 盐值</strong> (session salt key)</td><td>14 字节</td><td>构造每个包的加密 IV</td></tr><tr><td><code>0x03</code></td><td>SRTCP 加密密钥</td><td>16 字节</td><td>加密 RTCP（控制包）</td></tr><tr><td><code>0x04</code></td><td>SRTCP 认证密钥</td><td>20 字节</td><td>RTCP 的 HMAC</td></tr><tr><td><code>0x05</code></td><td>SRTCP 盐值</td><td>14 字节</td><td>RTCP 的 IV 盐</td></tr></tbody></table><h3 id="为什么-kdr-key-derivation-rate-通常设为-0" tabindex="-1">为什么 KDR（Key Derivation Rate）通常设为 0 <a class="header-anchor" href="#为什么-kdr-key-derivation-rate-通常设为-0" aria-label="Permalink to &quot;为什么 KDR（Key Derivation Rate）通常设为 0&quot;">​</a></h3><p>RFC 3711 允许周期性更换 session key（每 2^kdr 个包换一次）。WebRTC 实践中 <code>kdr=0</code>，含义是：</p><div class="language- vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span>kdr = 0  →  整个会话期间只派生一次 session key</span></span>
+<span class="line"><span>         →  每个包用相同的 session key，但 IV 不同（IV 含包索引）</span></span>
+<span class="line"><span>         →  简单、无换钥同步问题，AES-CM 的 IV 唯一性由包索引保证</span></span></code></pre></div><hr><h2 id="_16-2-4-aes-cm-加密-逐包构造-iv" tabindex="-1">16.2.4 AES-CM 加密：逐包构造 IV <a class="header-anchor" href="#_16-2-4-aes-cm-加密-逐包构造-iv" aria-label="Permalink to &quot;16.2.4 AES-CM 加密：逐包构造 IV&quot;">​</a></h2><p>AES-CM（Counter Mode）本质：把计数器块用 AES 加密得到密钥流（keystream），再与明文异或。</p><div class="language- vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span>keystream_block_i = AES-Encrypt(key = session_encryption_key,</span></span>
+<span class="line"><span>                                block = IV + i)     ← i 是 16 字节块计数器</span></span>
+<span class="line"><span>ciphertext = plaintext XOR keystream</span></span></code></pre></div><h3 id="iv-构造-rfc-3711-section-4-1-1" tabindex="-1">IV 构造（RFC 3711 Section 4.1.1） <a class="header-anchor" href="#iv-构造-rfc-3711-section-4-1-1" aria-label="Permalink to &quot;IV 构造（RFC 3711 Section 4.1.1）&quot;">​</a></h3><p>每个包的 IV 由三部分异或而成，保证<strong>同一会话内每个包的 IV 唯一</strong>：</p><div class="language- vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span>                     16 字节 IV 构造</span></span>
+<span class="line"><span>┌─────────────────────────────────────────────────────────────┐</span></span>
+<span class="line"><span>│                                                             │</span></span>
+<span class="line"><span>│   session_salt (14 字节, 对齐到 16 字节)                      │</span></span>
+<span class="line"><span>│      XOR                                                    │</span></span>
+<span class="line"><span>│   (SSRC &lt;&lt; 64)        ← 32-bit SSRC 放在第 4-7 字节          │</span></span>
+<span class="line"><span>│      XOR                                                    │</span></span>
+<span class="line"><span>│   (packet_index &lt;&lt; 16) ← 48-bit 包索引放在第 2-7 字节         │</span></span>
+<span class="line"><span>│                                                             │</span></span>
+<span class="line"><span>└─────────────────────────────────────────────────────────────┘</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>其中 packet_index = (ROC &lt;&lt; 16) | SEQ</span></span>
+<span class="line"><span>      ROC: Roll-Over Counter，序列号回绕计数（SEQ 从 65535 绕回 0 时 +1）</span></span>
+<span class="line"><span>      SEQ: RTP 头里的 16-bit 序列号</span></span></code></pre></div><div class="language- vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span>字节:    0   1   2   3   4   5   6   7   8   9  ... 15</span></span>
+<span class="line"><span>salt:   [s0][s1][s2][s3][s4][s5][s6][s7][s8][s9]...[s13][0][0]</span></span>
+<span class="line"><span>SSRC:                 ┌─── SSRC(32bit) ───┐</span></span>
+<span class="line"><span>index:        ┌──── packet_index(48bit) ────┐</span></span>
+<span class="line"><span>        IV = salt XOR SSRC XOR index  （按位异或）</span></span></code></pre></div><p><strong>为什么 RTP 头不加密</strong>：NAT 设备、SFU（Selective Forwarding Unit）、网络监控工具需要读取明文 RTP 头中的 SSRC 和序列号来路由和统计。SRTP 的设计哲学是&quot;<strong>只加密内容，保留路由元数据</strong>&quot;——这与 TLS 把整个 TCP 流加密形成鲜明对比。</p><hr><h2 id="_16-2-5-hmac-sha1-认证标签" tabindex="-1">16.2.5 HMAC-SHA1 认证标签 <a class="header-anchor" href="#_16-2-5-hmac-sha1-认证标签" aria-label="Permalink to &quot;16.2.5 HMAC-SHA1 认证标签&quot;">​</a></h2><p>加密保证机密性，但不防篡改。SRTP 用 <strong>HMAC-SHA1</strong> 对整个包（明文头 + 密文 payload + ROC）计算认证标签：</p><div class="language- vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span>auth_tag_full = HMAC-SHA1(</span></span>
+<span class="line"><span>    key   = session_authentication_key,     ← KDF 派生的 20 字节密钥</span></span>
+<span class="line"><span>    input = SRTP包(头+密文) || ROC(4 字节大端)</span></span>
+<span class="line"><span>)</span></span></code></pre></div><p>然后<strong>截断</strong>到标签长度：</p><table tabindex="0"><thead><tr><th>Profile</th><th>标签长度</th><th>场景</th></tr></thead><tbody><tr><td><code>SRTP_AES128_CM_HMAC_SHA1_80</code></td><td><strong>80 bit = 10 字节</strong></td><td>WebRTC 强制实现（mandatory-to-implement）</td></tr><tr><td><code>SRTP_AES128_CM_HMAC_SHA1_32</code></td><td><strong>32 bit = 4 字节</strong></td><td>带宽极敏感场景（如语音小包），安全性略降</td></tr></tbody></table><p>为什么敢截断 HMAC？HMAC 的安全性与标签长度线性相关，但 SRTP 场景的特殊性：</p><ul><li>攻击者伪造一个包的代价是<strong>在线猜测</strong>（不能像离线破解那样无限尝试）</li><li>80 bit 截断 → 单次伪造成功率 2⁻⁸⁰，实际不可行</li><li>32 bit 截断 → 2⁻³² ≈ 43 亿分之一，且每次失败会被接收方丢弃（无反馈），对实时媒体攻击价值低</li></ul><p>接收方验证：重新计算 HMAC，与包尾的标签比较，<strong>不等则整个包丢弃</strong>（不进入 Jitter Buffer，不触发 NACK——防止攻击者通过观察重传行为做侧信道分析）。</p><hr><h2 id="_16-2-6-重放保护-滑动窗口-roc" tabindex="-1">16.2.6 重放保护：滑动窗口 + ROC <a class="header-anchor" href="#_16-2-6-重放保护-滑动窗口-roc" aria-label="Permalink to &quot;16.2.6 重放保护：滑动窗口 + ROC&quot;">​</a></h2><p>攻击者无法伪造包，但可以<strong>原样重放</strong>一个旧包（比如把 10 秒前的&quot;开门&quot;指令音频重放）。SRTP 用<strong>滑动窗口（Sliding Window）</strong> 防御：</p><div class="language- vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span>接收方维护：</span></span>
+<span class="line"><span>  - 最高已接收索引 s_l (highest received index)</span></span>
+<span class="line"><span>  - 窗口位图 W（通常 64 bit，对应最近 64 个包）</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>包索引 index = (ROC &lt;&lt; 16) | SEQ</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>判断逻辑：</span></span>
+<span class="line"><span>  ┌────────────────────────────────────────────┐</span></span>
+<span class="line"><span>  │  delta = index - s_l                        │</span></span>
+<span class="line"><span>  │                                             │</span></span>
+<span class="line"><span>  │  delta &gt; 0        → 新包，滑窗前进，标记已收   │</span></span>
+<span class="line"><span>  │  delta &lt; -64      → 太旧，丢弃               │</span></span>
+<span class="line"><span>  │  -64 ≤ delta ≤ 0  → 查窗口位图：             │</span></span>
+<span class="line"><span>  │                     已标记 → 重放！丢弃        │</span></span>
+<span class="line"><span>  │                     未标记 → 接受并标记        │</span></span>
+<span class="line"><span>  └────────────────────────────────────────────┘</span></span></code></pre></div><h3 id="roc-roll-over-counter-的推断" tabindex="-1">ROC（Roll-Over Counter）的推断 <a class="header-anchor" href="#roc-roll-over-counter-的推断" aria-label="Permalink to &quot;ROC（Roll-Over Counter）的推断&quot;">​</a></h3><p>SEQ 只有 16 bit，65535 个包就回绕一次（50 pps 下约 22 分钟回绕一次）。接收方必须<strong>推断</strong>当前处于第几个 ROC 周期：</p><div class="language- vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span>接收方已知上一个合法包的 (ROC_prev, SEQ_prev)，收到新 SEQ：</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  若 SEQ_prev ∈ [32768, 65535]（高段）且 SEQ ∈ [0, 32767]（低段）:</span></span>
+<span class="line"><span>      → 回绕发生，ROC = ROC_prev + 1</span></span>
+<span class="line"><span>  若 SEQ_prev 低段且 SEQ 高段:</span></span>
+<span class="line"><span>      → 可能是乱序的旧包，ROC = ROC_prev - 1（谨慎处理）</span></span>
+<span class="line"><span>  否则:</span></span>
+<span class="line"><span>      → ROC = ROC_prev</span></span></code></pre></div><div class="language- vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span>SEQ 空间 (0 ~ 65535):</span></span>
+<span class="line"><span>        低段 (0-32767)              高段 (32768-65535)</span></span>
+<span class="line"><span>        ├─────────────────────────┼─────────────────────────┤</span></span>
+<span class="line"><span>                                ↑</span></span>
+<span class="line"><span>                     上一包在高位、新包在低位 → ROC++</span></span></code></pre></div><p><strong>正确性依赖</strong>：丢包不能太多（RFC 3711 要求 2¹⁵ 个包内至少收到一个合法包），否则 ROC 推断会失步——这也是 SRTP 要求用<strong>经过认证的包</strong>来更新 ROC 的原因，防止攻击者注入伪造包打乱计数器。</p><hr><h2 id="_16-2-7-小结-从握手到加密的完整链条" tabindex="-1">16.2.7 小结：从握手到加密的完整链条 <a class="header-anchor" href="#_16-2-7-小结-从握手到加密的完整链条" aria-label="Permalink to &quot;16.2.7 小结：从握手到加密的完整链条&quot;">​</a></h2><div class="language- vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span>DTLS 握手 (ECDHE)</span></span>
+<span class="line"><span>    │</span></span>
+<span class="line"><span>    ▼</span></span>
+<span class="line"><span>master_secret (48 字节)</span></span>
+<span class="line"><span>    │  TLS Exporter, label=&quot;EXTRACTOR-dtls_srtp&quot;</span></span>
+<span class="line"><span>    ▼</span></span>
+<span class="line"><span>master_key(16B) + master_salt(14B)   ← 双向各一份</span></span>
+<span class="line"><span>    │  SRTP KDF (AES-CM PRF, label 0x00/0x01/0x02)</span></span>
+<span class="line"><span>    ▼</span></span>
+<span class="line"><span>┌─────────────────┬──────────────────┬───────────────┐</span></span>
+<span class="line"><span>│ session enc key │ session auth key │ session salt  │</span></span>
+<span class="line"><span>│    (16 字节)     │    (20 字节)      │   (14 字节)    │</span></span>
+<span class="line"><span>└────────┬────────┴────────┬─────────┴───────┬───────┘</span></span>
+<span class="line"><span>         │                 │                 │</span></span>
+<span class="line"><span>         ▼                 │                 ▼</span></span>
+<span class="line"><span>   AES-CTR 加密            │        IV = salt XOR SSRC XOR index</span></span>
+<span class="line"><span>   payload                │                 │</span></span>
+<span class="line"><span>         │                 │                 │</span></span>
+<span class="line"><span>         └─────────┬───────┘                 │</span></span>
+<span class="line"><span>                   ▼                         │</span></span>
+<span class="line"><span>        HMAC-SHA1(头+密文+ROC)               │</span></span>
+<span class="line"><span>                   │                         │</span></span>
+<span class="line"><span>                   ▼                         │</span></span>
+<span class="line"><span>        截断为 10 字节 auth tag ◄─────────────┘</span></span>
+<span class="line"><span>                   │</span></span>
+<span class="line"><span>                   ▼</span></span>
+<span class="line"><span>            SRTP 包发出</span></span></code></pre></div><table tabindex="0"><thead><tr><th>环节</th><th>防什么</th><th>关键参数</th></tr></thead><tbody><tr><td>SDP 指纹验证</td><td>MITM 替换证书</td><td>SHA-256(证书DER)</td></tr><tr><td>TLS Exporter</td><td>把 DTLS 密钥与 SRTP 密钥隔离</td><td>label 字符串</td></tr><tr><td>SRTP KDF</td><td>一份种子多用（加密/认证/盐分离）</td><td>label 0x00~0x05</td></tr><tr><td>AES-CM</td><td>窃听</td><td>IV 唯一性（SSRC+index）</td></tr><tr><td>HMAC-SHA1 截断</td><td>篡改</td><td>80/32 bit 标签</td></tr><tr><td>滑动窗口 + ROC</td><td>重放</td><td>64-bit 窗口，48-bit 包索引</td></tr></tbody></table><p>下一章我们用纯 Node.js 内置模块把这条链条亲手实现一遍。</p><p>→ <a href="./practice">16.3 实战案例：Node.js 模拟 DTLS 握手与 SRTP 加解密</a></p>`,66)])])}const b=a(e,[["render",i]]);export{g as __pageData,b as default};

@@ -1,0 +1,194 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 840" font-family="'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#101a33"/>
+    </linearGradient>
+    <linearGradient id="titleGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fbbf24"/>
+      <stop offset="1" stop-color="#f97316"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="840" fill="url(#bg)"/>
+  <polygon points="980,0 1060,0 760,840 680,840" fill="#fbbf24" opacity="0.04"/>
+  <polygon points="150,0 220,0 1040,840 970,840" fill="#f97316" opacity="0.03"/>
+
+  <rect x="20" y="14" width="92" height="36" rx="9" fill="#7C3AED"/>
+  <text x="66" y="38" text-anchor="middle" font-size="18" font-weight="bold" fill="#ffffff">EP.09</text>
+  <text x="126" y="40" font-size="26" font-weight="bold" fill="url(#titleGrad)">一帧画面的 100ms 旅行</text>
+  <text x="1180" y="38" text-anchor="end" font-size="13" fill="#64748b">霓虹墨 NEON INK · webrtc-5g-tutorial</text>
+  <rect x="20" y="62" width="1160" height="2" rx="1" fill="url(#titleGrad)" opacity="0.6"/>
+
+  <!-- 面板 1 左上 · 困境 -->
+  <g transform="translate(20,84)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="380,0 450,0 120,361 50,361" fill="#f97316" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#f97316"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">1</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">困境：偶发卡成 PPT，不知道慢在哪</text>
+
+    <!-- 标签君头像 -->
+    <g transform="translate(52,110)">
+      <rect x="-19" y="14" width="38" height="22" rx="9" fill="#f97316"/>
+      <path d="M-5,18 L5,18 L3.5,27 L0,29 L-3.5,27 Z" fill="#f97316"/>
+      <circle cx="0" cy="-2" r="16" fill="#ffd9b3"/>
+      <path d="M-16,-2 L-11,-13 L-6,-4 L0,-14 L6,-4 L11,-13 L16,-2 Q0,-11 -16,-2 Z" fill="#f97316"/>
+      <circle cx="-5" cy="0" r="1.7" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.7" fill="#0b1220"/>
+      <path d="M-4,6 q4,-4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,100 74,106 88,112" fill="#f8fafc"/>
+    <rect x="88" y="70" width="380" height="64" rx="10" fill="#f8fafc"/>
+    <text x="102" y="92" font-size="15" fill="#0b1220">标签君：直播时用户反馈"卡成 PPT"</text>
+    <text x="102" y="114" font-size="15" fill="#0b1220">但 WebRTC Stats 里 RTT 才 30ms…</text>
+    <text x="102" y="134" font-size="14" fill="#f97316">我的帧到底慢在哪一站了？</text>
+
+    <!-- 帧接收图 -->
+    <rect x="24" y="148" width="524" height="80" rx="8" fill="#0a0f1c" stroke="#f97316" stroke-opacity="0.35"/>
+    <text x="38" y="172" font-size="13" fill="#e2e8f0">Chrome webrtc-internals 诊断：</text>
+    <text x="38" y="196" font-size="12.5" fill="#22d3ee" font-family="'SF Mono',Consolas,monospace">currentRoundTripTime  = 0.028s ✅</text>
+    <text x="38" y="216" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">jitterBufferEmittedCount 持续 &lt; inputBuffer 溢出</text>
+  </g>
+
+  <!-- 面板 2 右上 · 揭秘 -->
+  <g transform="translate(608,84)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="400,0 480,0 80,361 0,361" fill="#fbbf24" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#fbbf24"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">2</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">揭秘：一帧画面的 100ms 预算分配</text>
+
+    <!-- 码叔头像 -->
+    <g transform="translate(52,110)">
+      <circle cx="0" cy="-2" r="17" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+      <circle cx="-5" cy="0" r="1.8" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.8" fill="#0b1220"/>
+      <circle cx="-5" cy="0" r="6" fill="none" stroke="#0b1220" stroke-width="1.2"/>
+      <circle cx="5" cy="0" r="6" fill="none" stroke="#0b1220" stroke-width="1.2"/>
+      <path d="M-4,5 q4,4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,100 74,106 88,112" fill="#f8fafc"/>
+    <rect x="88" y="82" width="360" height="44" rx="10" fill="#f8fafc"/>
+    <text x="102" y="104" font-size="15" fill="#0b1220">码叔：RTT 只是最后一站</text>
+    <text x="102" y="124" font-size="14" fill="#0b1220">前面每一段都在花时间。</text>
+
+    <!-- 延迟预算分解条 -->
+    <rect x="24" y="142" width="524" height="200" rx="8" fill="#0a0f1c" stroke="#fbbf24" stroke-opacity="0.35"/>
+    <text x="38" y="164" font-size="13" fill="#e2e8f0">一帧画面的端到端延迟预算：</text>
+
+    <text x="38" y="188" font-size="12.5" fill="#22d3ee" font-family="'SF Mono',Consolas,monospace">采集 ──▶ 1ms</text>
+    <rect x="110" y="176" width="40" height="10" rx="2" fill="#22d3ee"/>
+
+    <text x="200" y="188" font-size="12.5" fill="#a78bfa" font-family="'SF Mono',Consolas,monospace">编码 ──▶ 10ms</text>
+    <rect x="270" y="176" width="100" height="10" rx="2" fill="#a78bfa"/>
+
+    <text x="38" y="212" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">传输 ──▶ 10ms</text>
+    <rect x="110" y="200" width="100" height="10" rx="2" fill="#f472b6"/>
+
+    <text x="200" y="212" font-size="12.5" fill="#34d399" font-family="'SF Mono',Consolas,monospace">SFU 转发 ──▶ 10ms</text>
+    <rect x="270" y="200" width="100" height="10" rx="2" fill="#34d399"/>
+
+    <text x="38" y="236" font-size="12.5" fill="#f97316" font-family="'SF Mono',Consolas,monospace">传输 ──▶ 10ms</text>
+    <rect x="110" y="224" width="100" height="10" rx="2" fill="#f97316"/>
+
+    <text x="200" y="236" font-size="12.5" fill="#fbbf24" font-family="'SF Mono',Consolas,monospace">解码 ──▶ 10ms</text>
+    <rect x="270" y="224" width="100" height="10" rx="2" fill="#fbbf24"/>
+
+    <text x="38" y="260" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">JitterBuffer ──▶ 20~100ms ⚠</text>
+    <rect x="130" y="248" width="200" height="10" rx="2" fill="#7dd3fc"/>
+
+    <text x="38" y="284" font-size="12.5" fill="#e2e8f0" font-family="'SF Mono',Consolas,monospace">渲染 ──▶ 5ms</text>
+    <rect x="130" y="272" width="50" height="10" rx="2" fill="#e2e8f0"/>
+
+    <text x="38" y="314" font-size="13.5" fill="#f472b6">Jitter Buffer 才是最大变数 ——</text>
+    <text x="38" y="334" font-size="13.5" fill="#f472b6">弱网时自动膨胀到 100ms+，帧就"拖"住了。</text>
+  </g>
+
+  <!-- 面板 3 左下 · 实证 -->
+  <g transform="translate(20,462)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="100,0 30,0 500,361 570,361" fill="#a78bfa" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#a78bfa"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">3</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">实证：GCC + Simulcast = 弱网保命符</text>
+
+    <!-- 像素酱头像 -->
+    <g transform="translate(52,95)">
+      <circle cx="0" cy="-2" r="17" fill="#ffd9b3"/>
+      <path d="M12,-8 Q24,0 18,12" fill="#22d3ee"/>
+      <path d="M-16,-6 Q-8,-18 0,-20 Q10,-18 16,-6 Q0,-12 -16,-6 Z" fill="#22d3ee"/>
+      <circle cx="-5" cy="0" r="1.8" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.8" fill="#0b1220"/>
+      <path d="M-4,5 q4,4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,85 74,91 88,97" fill="#f8fafc"/>
+    <rect x="88" y="67" width="400" height="44" rx="10" fill="#f8fafc"/>
+    <text x="102" y="90" font-size="15" fill="#0b1220">像素酱：GCC 是什么？我浏览器里开了吗？</text>
+    <text x="102" y="110" font-size="14" fill="#0b1220">码叔：Chrome 默认就是 GCC，不用你开。</text>
+
+    <rect x="24" y="130" width="524" height="212" rx="8" fill="#0a0f1c" stroke="#a78bfa" stroke-opacity="0.35"/>
+    <text x="38" y="154" font-size="13" fill="#e2e8f0">弱网自动降码率 · 三种方案对比：</text>
+
+    <!-- 对比条 -->
+    <text x="38" y="178" font-size="12.5" fill="#64748b" font-family="'SF Mono',Consolas,monospace">硬扛（无 GCC）：</text>
+    <rect x="120" y="166" width="400" height="14" rx="3" fill="#1e2a44"/>
+    <rect x="120" y="166" width="260" height="14" rx="3" fill="#f472b6"/>
+    <text x="526" y="178" font-size="12.5" fill="#f472b6">爆了 💥</text>
+
+    <text x="38" y="202" font-size="12.5" fill="#22d3ee" font-family="'SF Mono',Consolas,monospace">GCC 拥塞控制：</text>
+    <rect x="120" y="190" width="400" height="14" rx="3" fill="#1e2a44"/>
+    <rect x="120" y="190" width="180" height="14" rx="3" fill="#22d3ee"/>
+    <text x="526" y="202" font-size="12.5" fill="#22d3ee">稳 ✅</text>
+
+    <text x="38" y="226" font-size="12.5" fill="#34d399" font-family="'SF Mono',Consolas,monospace">+ Simulcast 分层：</text>
+    <rect x="120" y="214" width="400" height="14" rx="3" fill="#1e2a44"/>
+    <rect x="120" y="214" width="180" height="14" rx="3" fill="#34d399"/>
+    <rect x="120" y="232" width="160" height="14" rx="3" fill="#22d3ee" opacity="0.6"/>
+    <text x="526" y="226" font-size="12.5" fill="#34d399">自适应 ✅✅</text>
+
+    <text x="38" y="262" font-size="13" fill="#fbbf24">// 主播端（Chrome 默认 VP8 + GCC）</text>
+    <text x="38" y="282" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">// 自动开 simulcast，自动根据带宽降码率</text>
+    <text x="38" y="302" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">// 但你可以用 webrtc-internals 观察：</text>
+    <text x="38" y="322" font-size="12.5" fill="#fbbf24" font-family="'SF Mono',Consolas,monospace">chrome://webrtc-internals → getSenderStats → qualityLimitationReason</text>
+  </g>
+
+  <!-- 面板 4 右下 · 结案 -->
+  <g transform="translate(608,462)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="480,0 572,0 120,361 0,361" fill="#f97316" opacity="0.05"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#f97316"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">4</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">结案：延迟优化三板斧</text>
+
+    <!-- 码叔头像 -->
+    <g transform="translate(52,95)">
+      <circle cx="0" cy="-2" r="17" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+      <circle cx="-5" cy="0" r="1.8" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.8" fill="#0b1220"/>
+      <circle cx="-5" cy="0" r="6" fill="none" stroke="#0b1220" stroke-width="1.2"/>
+      <circle cx="5" cy="0" r="6" fill="none" stroke="#0b1220" stroke-width="1.2"/>
+      <path d="M-4,5 q4,4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,85 74,91 88,97" fill="#f8fafc"/>
+    <rect x="88" y="67" width="420" height="58" rx="10" fill="#f8fafc"/>
+    <text x="102" y="90" font-size="15" fill="#0b1220">码叔总结：低延迟不是调一个参数</text>
+    <text x="102" y="112" font-size="15" fill="#0b1220">而是整条链路上的每一环都不能拖后腿。</text>
+
+    <rect x="24" y="145" width="524" height="190" rx="8" fill="#0a0f1c" stroke="#f97316" stroke-opacity="0.35"/>
+    <rect x="34" y="155" width="62" height="22" rx="5" fill="#f97316"/>
+    <text x="65" y="171" text-anchor="middle" font-size="12" font-weight="bold" fill="#0b1220">⚠ 坑点</text>
+
+    <text x="38" y="196" font-size="13" fill="#f472b6">1. Jitter Buffer 是延迟大户</text>
+    <text x="52" y="218" font-size="12.5" fill="#94a3b8">—— 弱网时自动膨胀到 100ms+，Chrome 可设 JBD 但不建议</text>
+    <text x="52" y="236" font-size="12.5" fill="#94a3b8">—— 真正解法是 GCC + simulcast 让网络不要丢包</text>
+
+    <text x="38" y="260" font-size="13" fill="#f472b6">2. bframes = 0 硬约束</text>
+    <text x="52" y="282" font-size="12.5" fill="#94a3b8">—— B 帧需要参考未来帧，最低延迟 = GOP 间隔</text>
+    <text x="52" y="300" font-size="12.5" fill="#94a3b8">—— ffmpeg/libx264: `-bf 0`，x265: `-bframes 0`</text>
+
+    <text x="38" y="322" font-size="13" fill="#f472b6">3. Pacer 节奏不能乱</text>
+    <text x="52" y="344" font-size="12.5" fill="#94a3b8">—— 浏览器 Pacer 默认 10ms 队列，关了就是自寻死路</text>
+  </g>
+
+  <text x="1180" y="826" text-anchor="end" font-size="11" fill="#475569">NEON INK · webrtc-5g-tutorial · EP.09</text>
+</svg>

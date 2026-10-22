@@ -1,0 +1,178 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 840" font-family="'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#101a33"/>
+    </linearGradient>
+    <linearGradient id="titleGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#34d399"/>
+    </marker>
+    <marker id="arrowPink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#f472b6"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="840" fill="url(#bg)"/>
+  <polygon points="980,0 1060,0 760,840 680,840" fill="#22d3ee" opacity="0.04"/>
+  <polygon points="150,0 220,0 1040,840 970,840" fill="#34d399" opacity="0.03"/>
+
+  <rect x="20" y="14" width="92" height="36" rx="9" fill="#7C3AED"/>
+  <text x="66" y="38" text-anchor="middle" font-size="18" font-weight="bold" fill="#ffffff">EP.12</text>
+  <text x="126" y="40" font-size="26" font-weight="bold" fill="url(#titleGrad)">对称 NAT 下的中继租约</text>
+  <text x="1180" y="38" text-anchor="end" font-size="13" fill="#64748b">霓虹墨 NEON INK · webrtc-5g-tutorial</text>
+  <rect x="20" y="62" width="1160" height="2" rx="1" fill="url(#titleGrad)" opacity="0.6"/>
+
+  <!-- 面板 1 左上 · 困境 -->
+  <g transform="translate(20,84)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="380,0 450,0 120,361 50,361" fill="#22d3ee" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#22d3ee"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">1</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">困境：5G 下 ICE 失败</text>
+    <!-- 标签君头像 -->
+    <g transform="translate(52,100)">
+      <rect x="-19" y="14" width="38" height="22" rx="9" fill="#f97316"/>
+      <path d="M-5,18 L5,18 L3.5,27 L0,29 L-3.5,27 Z" fill="#f97316"/>
+      <circle cx="0" cy="-2" r="16" fill="#ffd9b3"/>
+      <path d="M-16,-2 L-11,-13 L-6,-4 L0,-14 L6,-4 L11,-13 L16,-2 Q0,-11 -16,-2 Z" fill="#f97316"/>
+      <circle cx="-5" cy="0" r="1.7" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.7" fill="#0b1220"/>
+      <path d="M-4,6 q4,-4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,92 74,98 88,104" fill="#f8fafc"/>
+    <rect x="88" y="74" width="400" height="66" rx="10" fill="#f8fafc"/>
+    <text x="102" y="96" font-size="15" fill="#0b1220">标签君：5G 网络跑 WebRTC Demo，</text>
+    <text x="102" y="118" font-size="15" fill="#0b1220">iceConnectionState 一直 failed，</text>
+    <text x="102" y="138" font-size="15" fill="#0b1220">换 WiFi 就正常……</text>
+    <rect x="24" y="152" width="524" height="90" rx="8" fill="#0a0f1c" stroke="#22d3ee" stroke-opacity="0.35"/>
+    <text x="38" y="174" font-size="12" fill="#64748b" font-family="'SF Mono',Consolas,monospace">// Chrome webrtc-internals</text>
+    <text x="38" y="194" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">iceConnectionState: failed</text>
+    <text x="38" y="214" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">candidate-pair: srflx × srflx ❌</text>
+    <text x="38" y="234" font-size="12.5" fill="#94a3b8" font-family="'SF Mono',Consolas,monospace">// 对称 NAT：每次外连端口都变</text>
+    <!-- 码叔头像 -->
+    <g transform="translate(52,272)">
+      <rect x="-19" y="14" width="38" height="22" rx="9" fill="#f8fafc" stroke="#223055" stroke-width="1.5"/>
+      <circle cx="0" cy="-2" r="17" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+      <circle cx="-5" cy="-4" r="5" fill="none" stroke="#64748b" stroke-width="1.5"/>
+      <circle cx="5" cy="-4" r="5" fill="none" stroke="#64748b" stroke-width="1.5"/>
+      <line x1="-1" y1="-4" x2="1" y2="-4" stroke="#64748b" stroke-width="1.5"/>
+      <circle cx="-5" cy="-4" r="1.8" fill="#0b1220"/>
+      <circle cx="5" cy="-4" r="1.8" fill="#0b1220"/>
+      <path d="M-4,5 q4,4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,262 74,268 88,274" fill="#f8fafc"/>
+    <rect x="88" y="244" width="420" height="58" rx="10" fill="#f8fafc"/>
+    <text x="102" y="266" font-size="15" fill="#0b1220">码叔：对称 NAT 下 STUN 失效，</text>
+    <text x="102" y="288" font-size="15" fill="#0b1220">必须走 TURN 中继才能连通。</text>
+  </g>
+
+  <!-- 面板 2 右上 · 揭秘 -->
+  <g transform="translate(608,84)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="400,0 480,0 80,361 0,361" fill="#a78bfa" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#a78bfa"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">2</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">揭秘：Allocate 握手</text>
+    <!-- 码叔头像 -->
+    <g transform="translate(52,100)">
+      <rect x="-19" y="14" width="38" height="22" rx="9" fill="#f8fafc" stroke="#223055" stroke-width="1.5"/>
+      <circle cx="0" cy="-2" r="17" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+      <circle cx="-5" cy="-4" r="5" fill="none" stroke="#64748b" stroke-width="1.5"/>
+      <circle cx="5" cy="-4" r="5" fill="none" stroke="#64748b" stroke-width="1.5"/>
+      <line x1="-1" y1="-4" x2="1" y2="-4" stroke="#64748b" stroke-width="1.5"/>
+      <circle cx="-5" cy="-4" r="1.8" fill="#0b1220"/>
+      <circle cx="5" cy="-4" r="1.8" fill="#0b1220"/>
+      <path d="M-4,5 q4,4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,92 74,98 88,104" fill="#f8fafc"/>
+    <rect x="88" y="74" width="400" height="58" rx="10" fill="#f8fafc"/>
+    <text x="102" y="96" font-size="15" fill="#0b1220">码叔：TURN 是"租用"服务器端口，</text>
+    <text x="102" y="118" font-size="15" fill="#0b1220">Allocate 两次握手拿到 relayed addr</text>
+    <!-- 流程图 -->
+    <rect x="24" y="144" width="524" height="178" rx="8" fill="#0a0f1c" stroke="#34d399" stroke-opacity="0.35"/>
+    <rect x="60" y="170" width="90" height="34" rx="6" fill="#0e1730" stroke="#34d399" stroke-opacity="0.5"/>
+    <text x="105" y="192" text-anchor="middle" font-size="12.5" fill="#34d399">客户端</text>
+    <rect x="420" y="170" width="110" height="34" rx="6" fill="#0e1730" stroke="#a78bfa" stroke-opacity="0.5"/>
+    <text x="475" y="192" text-anchor="middle" font-size="12.5" fill="#a78bfa">TURN 服务器</text>
+    <line x1="150" y1="220" x2="420" y2="220" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+    <text x="285" y="212" text-anchor="middle" font-size="11.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">Allocate</text>
+    <line x1="420" y1="244" x2="150" y2="244" stroke="#f472b6" stroke-width="1.5" marker-end="url(#arrowPink)"/>
+    <text x="285" y="238" text-anchor="middle" font-size="11.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">401 Unauthorized + REALM</text>
+    <line x1="150" y1="268" x2="420" y2="268" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+    <text x="285" y="260" text-anchor="middle" font-size="11.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">Allocate (MD5 凭证）</text>
+    <line x1="420" y1="292" x2="150" y2="292" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+    <text x="285" y="286" text-anchor="middle" font-size="11.5" fill="#34d399" font-family="'SF Mono',Consolas,monospace">Success + XOR-RELAYED-ADDRESS</text>
+    <text x="285" y="318" text-anchor="middle" font-size="12" fill="#fbbf24">租约 600 秒，到期前 Refresh</text>
+  </g>
+
+  <!-- 面板 3 左下 · 实证 -->
+  <g transform="translate(20,462)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="100,0 30,0 500,361 570,361" fill="#f472b6" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#f472b6"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">3</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">实证：mini TURN 日志</text>
+    <!-- 标签君头像 -->
+    <g transform="translate(52,100)">
+      <rect x="-19" y="14" width="38" height="22" rx="9" fill="#f97316"/>
+      <path d="M-5,18 L5,18 L3.5,27 L0,29 L-3.5,27 Z" fill="#f97316"/>
+      <circle cx="0" cy="-2" r="16" fill="#ffd9b3"/>
+      <path d="M-16,-2 L-11,-13 L-6,-4 L0,-14 L6,-4 L11,-13 L16,-2 Q0,-11 -16,-2 Z" fill="#f97316"/>
+      <circle cx="-5" cy="0" r="1.7" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.7" fill="#0b1220"/>
+      <path d="M-4,6 q4,-4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,92 74,98 88,104" fill="#f8fafc"/>
+    <rect x="88" y="74" width="400" height="58" rx="10" fill="#f8fafc"/>
+    <text x="102" y="96" font-size="15" fill="#0b1220">标签君：亲手跑 mini TURN server！</text>
+    <text x="102" y="118" font-size="15" fill="#0b1220">看到 401 → success 全流程</text>
+    <rect x="24" y="144" width="524" height="146" rx="8" fill="#0a0f1c" stroke="#f472b6" stroke-opacity="0.35"/>
+    <text x="38" y="166" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">$ node mini-turn.js --realm=webrtc</text>
+    <text x="38" y="188" font-size="12.5" fill="#94a3b8" font-family="'SF Mono',Consolas,monospace">[TURN] &lt;-- Allocate request</text>
+    <text x="38" y="210" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">[TURN] --&gt; 401 Unauthorized (realm)</text>
+    <text x="38" y="232" font-size="12.5" fill="#94a3b8" font-family="'SF Mono',Consolas,monospace">[TURN] &lt;-- Allocate (user=web, MD5 ✓)</text>
+    <text x="38" y="254" font-size="12.5" fill="#34d399" font-family="'SF Mono',Consolas,monospace">[TURN] --&gt; Allocate Success</text>
+    <text x="38" y="276" font-size="12.5" fill="#34d399" font-family="'SF Mono',Consolas,monospace">[TURN] relayed=203.0.113.10:50001</text>
+    <rect x="24" y="302" width="524" height="48" rx="8" fill="#0a0f1c" stroke="#34d399" stroke-opacity="0.35"/>
+    <text x="38" y="324" font-size="12.5" fill="#fbbf24" font-family="'SF Mono',Consolas,monospace">// 租约 600s，建议 550s 时 Refresh</text>
+    <text x="38" y="342" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">setInterval(refreshAllocation, 550000)</text>
+  </g>
+
+  <!-- 面板 4 右下 · 结案 -->
+  <g transform="translate(608,462)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="480,0 572,0 120,361 0,361" fill="#f97316" opacity="0.05"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#f97316"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">4</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">结案：最佳实践与坑点</text>
+    <!-- 码叔头像 -->
+    <g transform="translate(52,90)">
+      <rect x="-19" y="14" width="38" height="22" rx="9" fill="#f8fafc" stroke="#223055" stroke-width="1.5"/>
+      <circle cx="0" cy="-2" r="17" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+      <circle cx="-5" cy="-4" r="5" fill="none" stroke="#64748b" stroke-width="1.5"/>
+      <circle cx="5" cy="-4" r="5" fill="none" stroke="#64748b" stroke-width="1.5"/>
+      <line x1="-1" y1="-4" x2="1" y2="-4" stroke="#64748b" stroke-width="1.5"/>
+      <circle cx="-5" cy="-4" r="1.8" fill="#0b1220"/>
+      <circle cx="5" cy="-4" r="1.8" fill="#0b1220"/>
+      <path d="M-4,5 q4,4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,82 74,88 88,94" fill="#f8fafc"/>
+    <rect x="88" y="64" width="400" height="58" rx="10" fill="#f8fafc"/>
+    <text x="102" y="86" font-size="15" fill="#0b1220">码叔：最佳实践记三条——</text>
+    <text x="102" y="108" font-size="15" fill="#0b1220">租约、权限、MD5 顺序。</text>
+    <rect x="24" y="134" width="524" height="200" rx="8" fill="#0a0f1c" stroke="#f97316" stroke-opacity="0.35"/>
+    <rect x="34" y="144" width="62" height="22" rx="5" fill="#f97316"/>
+    <text x="65" y="160" text-anchor="middle" font-size="12" font-weight="bold" fill="#0b1220">⚠ 坑点</text>
+    <text x="38" y="190" font-size="13" fill="#f472b6">1. ChannelBind 必须在权限内</text>
+    <text x="52" y="212" font-size="12.5" fill="#94a3b8">—— 先 CreatePermission，再 ChannelBind，否则 403</text>
+    <text x="38" y="240" font-size="13" fill="#f472b6">2. 租约到期前必须 Refresh</text>
+    <text x="52" y="262" font-size="12.5" fill="#94a3b8">—— 600s 租约，建议 550s 前刷新，否则中继端口被回收</text>
+    <text x="38" y="290" font-size="13" fill="#f472b6">3. 长期凭证 MD5 顺序别搞反</text>
+    <text x="52" y="312" font-size="12.5" fill="#94a3b8">—— MD5(username:realm:password)，顺序错则 401</text>
+  </g>
+
+  <text x="1180" y="826" text-anchor="end" font-size="11" fill="#475569">NEON INK · webrtc-5g-tutorial · EP.12</text>
+</svg>

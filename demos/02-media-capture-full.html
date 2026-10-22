@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>WebRTC 媒体采集 Demo</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 900px; margin: 40px auto; padding: 0 20px; }
+  video { width: 100%; max-height: 480px; background: #000; border-radius: 8px; }
+  .controls { display: flex; gap: 10px; margin: 16px 0; flex-wrap: wrap; }
+  button { padding: 8px 16px; border-radius: 6px; border: 1px solid #ccc; cursor: pointer; background: #fff; }
+  button.active { background: #22d3ee; color: #0b1220; border-color: #22d3ee; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .status { font-family: monospace; background: #f5f5f5; padding: 12px; border-radius: 6px; font-size: 13px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+</style>
+</head>
+<body>
+<h2>🎥 WebRTC 媒体采集 Demo</h2>
+<div class="row">
+  <video id="local" autoplay playsinline muted></video>
+  <div class="status" id="status">等待开启...</div>
+</div>
+
+<div class="controls">
+  <button id="btn-camera">📷 摄像头</button>
+  <button id="btn-screen">🖥️ 屏幕共享</button>
+  <button id="btn-switch">🔄 切换前后置</button>
+  <button id="btn-toggle-video">👁️ 切视频</button>
+  <button id="btn-toggle-audio">🔊 切音频</button>
+  <button id="btn-stop">⏹️ 全部停止</button>
+</div>
+
+<h3>📊 轨道信息</h3>
+<div class="status" id="track-info">暂无轨道</div>
+
+<script>
+const videoEl = document.getElementById('local')
+const statusEl = document.getElementById('status')
+const trackInfoEl = document.getElementById('track-info')
+
+let currentStream = null
+let facingMode = 'user'  // 前置
+
+function updateStatus(msg) {
+  statusEl.textContent = msg
+}
+
+function updateTrackInfo() {
+  if (!currentStream) { trackInfoEl.textContent = '暂无轨道'; return }
+  const tracks = currentStream.getTracks()
+  trackInfoEl.innerHTML = tracks.map(t => {
+    const s = t.getSettings()
+    return `<strong>${t.kind} · ${t.label || '未知'}</strong><br>
+      enabled=${t.enabled} | state=${t.readyState}<br>
+      ${s.width ? `${s.width}×${s.height} @ ${s.frameRate}fps` : ''}
+      ${s.sampleRate ? ` | ${s.sampleRate}Hz ${s.channelCount}ch` : ''}`
+  }).join('<hr>')
+}
+
+async function startCamera() {
+  stopAll()
+  try {
+    currentStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode, width: { ideal: 1280 }, height: { ideal: 720 } },
+      audio: { echoCancellation: true, noiseSuppression: true }
+    })
+    videoEl.srcObject = currentStream
+    updateStatus(`✅ 摄像头已开启 (${facingMode === 'user' ? '前置' : '后置'})`)
+    updateTrackInfo()
+  } catch (err) {
+    updateStatus(`❌ 摄像头失败: ${err.name}`)
+  }
+}
+
+async function startScreen() {
+  stopAll()
+  try {
+    currentStream = await navigator.mediaDevices.getDisplayMedia({
+      video: { frameRate: 30 },
+      audio: false
+    })
+    videoEl.srcObject = currentStream
+    updateStatus('✅ 屏幕共享已开启')
+    // 用户点系统停止按钮
+    currentStream.getVideoTracks()[0].addEventListener('ended', () => {
+      stopAll()
+      updateStatus('用户停止了屏幕共享')
+    })
+    updateTrackInfo()
+  } catch (err) {
+    if (err.name !== 'NotAllowedError') updateStatus(`❌ 屏幕共享失败: ${err.name}`)
+    else updateStatus('屏幕共享已取消')
+  }
+}
+
+function stopAll() {
+  currentStream?.getTracks().forEach(t => t.stop())
+  currentStream = null
+  videoEl.srcObject = null
+}
+
+// 事件绑定
+document.getElementById('btn-camera').onclick = startCamera
+document.getElementById('btn-screen').onclick = startScreen
+document.getElementById('btn-stop').onclick = () => { stopAll(); updateStatus('已停止'); updateTrackInfo() }
+document.getElementById('btn-switch').onclick = () => {
+  facingMode = facingMode === 'user' ? 'environment' : 'user'
+  if (currentStream) startCamera()
+}
+document.getElementById('btn-toggle-video').onclick = () => {
+  const t = currentStream?.getVideoTracks()[0]
+  if (t) { t.enabled = !t.enabled; updateStatus(t.enabled ? '视频开' : '视频关'); updateTrackInfo() }
+}
+document.getElementById('btn-toggle-audio').onclick = () => {
+  const t = currentStream?.getAudioTracks()[0]
+  if (t) { t.enabled = !t.enabled; updateStatus(t.enabled ? '音频开' : '音频关'); updateTrackInfo() }
+}
+</script>
+</body>
+</html>

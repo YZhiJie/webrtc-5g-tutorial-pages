@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 840" font-family="'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#101a33"/>
+    </linearGradient>
+    <linearGradient id="titleGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#22d3ee"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="840" fill="url(#bg)"/>
+  <polygon points="980,0 1060,0 760,840 680,840" fill="#22d3ee" opacity="0.04"/>
+  <polygon points="150,0 220,0 1040,840 970,840" fill="#a78bfa" opacity="0.03"/>
+
+  <rect x="20" y="14" width="92" height="36" rx="9" fill="#7C3AED"/>
+  <text x="66" y="38" text-anchor="middle" font-size="18" font-weight="bold" fill="#ffffff">EP.05</text>
+  <text x="126" y="40" font-size="26" font-weight="bold" fill="url(#titleGrad)">Offer / Answer 里到底写了什么</text>
+  <text x="1180" y="38" text-anchor="end" font-size="13" fill="#64748b">霓虹墨 NEON INK · webrtc-5g-tutorial</text>
+  <rect x="20" y="62" width="1160" height="2" rx="1" fill="url(#titleGrad)" opacity="0.6"/>
+
+  <!-- 面板 1 左上 · 困境 -->
+  <g transform="translate(20,84)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="380,0 450,0 120,361 50,361" fill="#22d3ee" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#22d3ee"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">1</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">困境：Offer 里写了啥</text>
+    <!-- 标签君头像 -->
+    <g transform="translate(52,100)">
+      <rect x="-19" y="14" width="38" height="22" rx="9" fill="#f97316"/>
+      <path d="M-5,18 L5,18 L3.5,27 L0,29 L-3.5,27 Z" fill="#f97316"/>
+      <circle cx="0" cy="-2" r="16" fill="#ffd9b3"/>
+      <path d="M-16,-2 L-11,-13 L-6,-4 L0,-14 L6,-4 L11,-13 L16,-2 Q0,-11 -16,-2 Z" fill="#f97316"/>
+      <circle cx="-5" cy="0" r="1.7" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.7" fill="#0b1220"/>
+      <path d="M-4,6 q4,-4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,92 74,98 88,104" fill="#f8fafc"/>
+    <rect x="88" y="74" width="340" height="62" rx="10" fill="#f8fafc"/>
+    <text x="102" y="96" font-size="15" fill="#0b1220">标签君：createOffer 成功了</text>
+    <text x="102" y="118" font-size="15" fill="#0b1220">但 console.log(offer) 出来一坨</text>
+    <text x="102" y="138" font-size="15" fill="#0b1220">setRemoteDescription 还报错……</text>
+    <rect x="24" y="146" width="524" height="94" rx="8" fill="#0a0f1c" stroke="#22d3ee" stroke-opacity="0.35"/>
+    <text x="38" y="168" font-size="12" fill="#64748b" font-family="'SF Mono',Consolas,monospace">// 标签君控制台输出（截断）</text>
+    <text x="38" y="188" font-size="11.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">v=0</text>
+    <text x="38" y="206" font-size="11.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">o=- 4217 2 IN IP4 127.0.0.1</text>
+    <text x="38" y="224" font-size="11.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">s=-</text>
+    <text x="38" y="242" font-size="11.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">t=0 0</text>
+    <text x="38" y="260" font-size="11.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">m=video 9 UDP/TLS/RTP/SAVPF 96 97 100</text>
+    <rect x="24" y="252" width="524" height="72" rx="8" fill="#111a30" stroke="#1e2a44"/>
+    <rect x="24" y="252" width="4" height="72" rx="2" fill="#22d3ee"/>
+    <text x="40" y="274" font-size="13.5" fill="#e2e8f0">像素酱：这堆 ASCII 文本到底是怎么</text>
+    <text x="40" y="294" font-size="13.5" fill="#e2e8f0">从一个浏览器漂到另一个浏览器的？</text>
+    <text x="40" y="314" font-size="13.5" fill="#94a3b8">—— SDP 是 WebRTC 的"相亲简历"</text>
+  </g>
+
+  <!-- 面板 2 右上 · 揭秘 -->
+  <g transform="translate(608,84)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="400,0 480,0 80,361 0,361" fill="#a78bfa" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#a78bfa"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">2</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">揭秘：Offer → Answer 流程图</text>
+    <!-- 码叔头像 -->
+    <g transform="translate(52,100)">
+      <circle cx="0" cy="-2" r="17" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+      <circle cx="-5" cy="0" r="1.8" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.8" fill="#0b1220"/>
+      <path d="M-4,5 q4,4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,92 74,98 88,104" fill="#f8fafc"/>
+    <rect x="88" y="74" width="380" height="58" rx="10" fill="#f8fafc"/>
+    <text x="102" y="96" font-size="15" fill="#0b1220">码叔：SDP 分两层走</text>
+    <text x="102" y="118" font-size="15" fill="#0b1220">① Offer/Answer 一轮就够（描述媒体）</text>
+    <text x="102" y="138" font-size="15" fill="#0b1220">② ICE 候选走 Trickle（增量上报）</text>
+    <!-- 信令流程图 -->
+    <rect x="24" y="148" width="524" height="182" rx="8" fill="#0a0f1c" stroke="#a78bfa" stroke-opacity="0.35"/>
+    <text x="38" y="172" font-size="13.5" fill="#22d3ee">浏览器 A（caller）</text>
+    <text x="300" y="172" font-size="13.5" fill="#f472b6">信令服务器</text>
+    <text x="420" y="172" font-size="13.5" fill="#34d399">浏览器 B（callee）</text>
+    <line x1="70" y1="182" x2="70" y2="320" stroke="#223055" stroke-width="1"/>
+    <line x1="340" y1="182" x2="340" y2="320" stroke="#223055" stroke-width="1"/>
+    <line x1="460" y1="182" x2="460" y2="320" stroke="#223055" stroke-width="1"/>
+    <!-- Offer -->
+    <line x1="70" y1="200" x2="460" y2="200" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <text x="265" y="194" text-anchor="middle" font-size="11.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">Offer SDP</text>
+    <!-- Answer -->
+    <line x1="460" y1="222" x2="70" y2="222" stroke="#a78bfa" stroke-width="1.5"/>
+    <text x="265" y="216" text-anchor="middle" font-size="11.5" fill="#a78bfa" font-family="'SF Mono',Consolas,monospace">Answer SDP</text>
+    <!-- ICE Trickle -->
+    <line x1="70" y1="248" x2="460" y2="248" stroke="#34d399" stroke-width="1.2" stroke-dasharray="4,3"/>
+    <text x="265" y="242" text-anchor="middle" font-size="11.5" fill="#34d399" font-family="'SF Mono',Consolas,monospace">ICE candidate（增量）</text>
+    <line x1="460" y1="270" x2="70" y2="270" stroke="#34d399" stroke-width="1.2" stroke-dasharray="4,3"/>
+    <text x="265" y="264" text-anchor="middle" font-size="11.5" fill="#34d399" font-family="'SF Mono',Consolas,monospace">ICE candidate（增量）</text>
+    <text x="70" y="300" font-size="12" fill="#fbbf24">// SDP = "我能做什么"</text>
+    <text x="70" y="318" font-size="11.5" fill="#94a3b8" font-family="'SF Mono',Consolas,monospace">codecs / bandwidth / ice-ufrag</text>
+  </g>
+
+  <!-- 面板 3 左下 · 实证 -->
+  <g transform="translate(20,462)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="100,0 30,0 500,361 570,361" fill="#f472b6" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#f472b6"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">3</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">实证：两个标签页的 Offer/Answer</text>
+    <rect x="24" y="60" width="524" height="290" rx="8" fill="#0a0f1c" stroke="#f472b6" stroke-opacity="0.35"/>
+    <text x="38" y="84" font-size="13.5" fill="#e2e8f0">标签君用 BroadcastChannel 做跨标签页信令：</text>
+    <text x="38" y="108" font-size="12" fill="#64748b" font-family="'SF Mono',Consolas,monospace">// 标签页 A —— caller</text>
+    <text x="38" y="128" font-size="12" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">const bc = new BroadcastChannel('webrtc');</text>
+    <text x="38" y="148" font-size="12" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">pc.createOffer().then(o =&gt; {</text>
+    <text x="52" y="168" font-size="12" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">  pc.setLocalDescription(o);</text>
+    <text x="52" y="188" font-size="12" fill="#fbbf24" font-family="'SF Mono',Consolas,monospace">  bc.postMessage({ type: 'offer', sdp: o });</text>
+    <text x="38" y="208" font-size="12" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">});</text>
+    <text x="38" y="232" font-size="12" fill="#64748b" font-family="'SF Mono',Consolas,monospace">// 标签页 B —— callee</text>
+    <text x="38" y="252" font-size="12" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">bc.onmessage = async e =&gt; {</text>
+    <text x="52" y="272" font-size="12" fill="#fbbf24" font-family="'SF Mono',Consolas,monospace">  await pc.setRemoteDescription(e.data);</text>
+    <text x="52" y="292" font-size="12" fill="#34d399" font-family="'SF Mono',Consolas,monospace">  const ans = await pc.createAnswer();</text>
+    <text x="52" y="312" font-size="12" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">  await pc.setLocalDescription(ans);</text>
+    <text x="52" y="332" font-size="12" fill="#fbbf24" font-family="'SF Mono',Consolas,monospace">  bc.postMessage({ type: 'answer', sdp: ans });</text>
+    <text x="38" y="348" font-size="12" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">};</text>
+  </g>
+
+  <!-- 面板 4 右下 · 结案 -->
+  <g transform="translate(608,462)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="480,0 572,0 120,361 0,361" fill="#f97316" opacity="0.05"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#f97316"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">4</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">结案：信令三件事记牢</text>
+    <!-- 码叔头像 -->
+    <g transform="translate(52,90)">
+      <circle cx="0" cy="-2" r="17" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+      <circle cx="-5" cy="0" r="1.8" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.8" fill="#0b1220"/>
+      <path d="M-4,5 q4,4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,82 74,88 88,94" fill="#f8fafc"/>
+    <rect x="88" y="64" width="380" height="66" rx="10" fill="#f8fafc"/>
+    <text x="102" y="86" font-size="15" fill="#0b1220">码叔：信令服务器只做转发，</text>
+    <text x="102" y="108" font-size="15" fill="#0b1220">不做解释、不做改动。</text>
+    <text x="102" y="128" font-size="15" fill="#0b1220">Offer/Answer 格式浏览器自己定。</text>
+    <rect x="24" y="144" width="524" height="190" rx="8" fill="#0a0f1c" stroke="#f97316" stroke-opacity="0.35"/>
+    <rect x="34" y="154" width="62" height="22" rx="5" fill="#f97316"/>
+    <text x="65" y="170" text-anchor="middle" font-size="12" font-weight="bold" fill="#0b1220">⚠ 坑点</text>
+    <text x="38" y="198" font-size="13" fill="#f472b6">1. Trickle ICE 别关！</text>
+    <text x="52" y="220" font-size="12.5" fill="#94a3b8">—— addIceCandidate 单独处理候选，不要等 gatheringcomplete</text>
+    <text x="38" y="248" font-size="13" fill="#f472b6">2. Plan B vs Unified Plan</text>
+    <text x="52" y="270" font-size="12.5" fill="#94a3b8">—— 现代浏览器默认 Unified Plan，Chrome 72+ 强制 Unified Plan</text>
+    <text x="38" y="298" font-size="13" fill="#f472b6">3. 信令服务器只转发</text>
+    <text x="52" y="320" font-size="12.5" fill="#94a3b8">—— 不要用 SDP 内容做逻辑判断，兼容性会炸</text>
+  </g>
+
+  <text x="1180" y="826" text-anchor="end" font-size="11" fill="#475569">NEON INK · webrtc-5g-tutorial · EP.05</text>
+</svg>

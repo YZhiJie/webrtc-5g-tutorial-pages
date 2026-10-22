@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 840" font-family="'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#101a33"/>
+    </linearGradient>
+    <linearGradient id="titleGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="840" fill="url(#bg)"/>
+  <polygon points="980,0 1060,0 760,840 680,840" fill="#22d3ee" opacity="0.04"/>
+  <polygon points="150,0 220,0 1040,840 970,840" fill="#a78bfa" opacity="0.03"/>
+
+  <rect x="20" y="14" width="92" height="36" rx="9" fill="#7C3AED"/>
+  <text x="66" y="38" text-anchor="middle" font-size="18" font-weight="bold" fill="#ffffff">EP.02</text>
+  <text x="126" y="40" font-size="26" font-weight="bold" fill="url(#titleGrad)">getUserMedia 把摄像头变成流</text>
+  <text x="1180" y="38" text-anchor="end" font-size="13" fill="#64748b">霓虹墨 NEON INK · webrtc-5g-tutorial</text>
+  <rect x="20" y="62" width="1160" height="2" rx="1" fill="url(#titleGrad)" opacity="0.6"/>
+
+  <!-- 面板 1 左上 · 困境 -->
+  <g transform="translate(20,84)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="380,0 450,0 120,361 50,361" fill="#22d3ee" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#22d3ee"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">1</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">困境：以为返回的是 video 元素</text>
+    <g transform="translate(52,110)">
+      <rect x="-19" y="14" width="38" height="22" rx="9" fill="#f97316"/>
+      <path d="M-5,18 L5,18 L3.5,27 L0,29 L-3.5,27 Z" fill="#f97316"/>
+      <circle cx="0" cy="-2" r="16" fill="#ffd9b3"/>
+      <path d="M-16,-2 L-11,-13 L-6,-4 L0,-14 L6,-4 L11,-13 L16,-2 Q0,-11 -16,-2 Z" fill="#f97316"/>
+      <circle cx="-5" cy="0" r="1.7" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.7" fill="#0b1220"/>
+      <path d="M-4,6 q4,-4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,100 74,106 88,112" fill="#f8fafc"/>
+    <rect x="88" y="82" width="380" height="66" rx="10" fill="#f8fafc"/>
+    <text x="102" y="104" font-size="15" fill="#0b1220">标签君：getUserMedia 返回的是</text>
+    <text x="102" y="126" font-size="15" fill="#0b1220">什么？我以为直接 &lt;video&gt; 就能播</text>
+    <text x="102" y="146" font-size="14" fill="#f97316">结果……控制台显示一个 MediaStream</text>
+    <rect x="24" y="162" width="524" height="100" rx="8" fill="#0a0f1c" stroke="#22d3ee" stroke-opacity="0.35"/>
+    <text x="38" y="184" font-size="12.5" fill="#64748b" font-family="'SF Mono',Consolas,monospace">// 标签君的第一个 WebRTC Demo</text>
+    <text x="38" y="206" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">const stream = await navigator.mediaDevices</text>
+    <text x="38" y="226" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">  .getUserMedia({ video: true, audio: true })</text>
+    <text x="38" y="246" font-size="12.5" fill="#34d399" font-family="'SF Mono',Consolas,monospace">console.log(stream) // MediaStream { id: 'xxx' }</text>
+    <text x="38" y="264" font-size="12.5" fill="#94a3b8" font-family="'SF Mono',Consolas,monospace">// 不是 HTMLVideoElement，不能直接 append 上去</text>
+    <rect x="24" y="278" width="524" height="52" rx="8" fill="#111a30" stroke="#1e2a44"/>
+    <rect x="24" y="278" width="4" height="52" rx="2" fill="#22d3ee"/>
+    <text x="40" y="300" font-size="13.5" fill="#e2e8f0">返回的是 **MediaStream 对象**，里面包着若干 MediaStreamTrack</text>
+    <text x="40" y="320" font-size="13.5" fill="#94a3b8">需要手动赋给 video.srcObject，浏览器才会渲染画面</text>
+  </g>
+
+  <!-- 面板 2 右上 · 揭秘 -->
+  <g transform="translate(608,84)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="400,0 480,0 80,361 0,361" fill="#a78bfa" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#a78bfa"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">2</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">揭秘：MediaStream 管线</text>
+    <g transform="translate(52,110)">
+      <circle cx="0" cy="-2" r="16" fill="#ffd9b3"/>
+      <path d="M-16,-2 L-11,-14 L-6,-5 L0,-16 L6,-5 L11,-14 L16,-2 Q0,-11 -16,-2 Z" fill="#f8fafc" stroke="#a78bfa" stroke-width="2"/>
+      <circle cx="-5" cy="0" r="1.7" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.7" fill="#0b1220"/>
+      <path d="M-4,5 q4,4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,100 74,106 88,112" fill="#f8fafc"/>
+    <rect x="88" y="82" width="380" height="52" rx="10" fill="#f8fafc"/>
+    <text x="102" y="104" font-size="15" fill="#0b1220">码叔画清楚三层关系：</text>
+    <text x="102" y="126" font-size="15" fill="#0b1220">MediaStream → MediaStreamTrack → 渲染</text>
+    <rect x="24" y="152" width="524" height="178" rx="8" fill="#0a0f1c" stroke="#a78bfa" stroke-opacity="0.35"/>
+    <text x="38" y="176" font-size="13.5" fill="#e2e8f0">getUserMedia()</text>
+    <text x="38" y="198" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">  ↓ 返回</text>
+    <text x="38" y="218" font-size="13.5" fill="#a78bfa">MediaStream（一整条河）</text>
+    <text x="52" y="242" font-size="12.5" fill="#94a3b8" font-family="'SF Mono',Consolas,monospace">  .getVideoTracks() → [videoTrack]</text>
+    <text x="52" y="262" font-size="12.5" fill="#94a3b8" font-family="'SF Mono',Consolas,monospace">  .getAudioTracks() → [audioTrack]</text>
+    <text x="38" y="286" font-size="13.5" fill="#f472b6">MediaStreamTrack（河道里的一条船）</text>
+    <text x="52" y="308" font-size="12.5" fill="#94a3b8" font-family="'SF Mono',Consolas,monospace">  { kind: 'video', enabled: true, readyState }</text>
+    <text x="38" y="328" font-size="13.5" fill="#34d399">video.srcObject = stream → 浏览器自动渲染 ✅</text>
+  </g>
+
+  <!-- 面板 3 左下 · 实证 -->
+  <g transform="translate(20,462)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="100,0 30,0 500,361 570,361" fill="#34d399" opacity="0.04"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#34d399"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">3</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">实证：getDisplayMedia 屏幕共享</text>
+    <rect x="24" y="60" width="524" height="150" rx="8" fill="#0a0f1c" stroke="#34d399" stroke-opacity="0.35"/>
+    <text x="38" y="84" font-size="12.5" fill="#f472b6" font-family="'SF Mono',Consolas,monospace">// 屏幕共享 —— 必须用户手势触发（点击事件内）</text>
+    <text x="38" y="106" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">btn.onclick = async () => {</text>
+    <text x="52" y="126" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">  const display = await navigator.mediaDevices</text>
+    <text x="52" y="146" font-size="12.5" fill="#7dd3fc" font-family="'SF Mono',Consolas,monospace">    .getDisplayMedia({ video: true, audio: false })</text>
+    <text x="52" y="166" font-size="12.5" fill="#fbbf24" font-family="'SF Mono',Consolas,monospace">  video.srcObject = display</text>
+    <text x="52" y="186" font-size="12.5" fill="#fbbf24" font-family="'SF Mono',Consolas,monospace">  // 只有一个 track：display 画面</text>
+    <text x="52" y="204" font-size="12.5" fill="#34d399" font-family="'SF Mono',Consolas,monospace">}</text>
+    <g transform="translate(400,80)">
+      <circle cx="0" cy="0" r="28" fill="#34d399" opacity="0.2"/>
+      <text x="0" y="6" text-anchor="middle" font-size="24" font-weight="bold" fill="#34d399">OK</text>
+    </g>
+    <rect x="24" y="220" width="524" height="110" rx="8" fill="#0a0f1c" stroke="#fbbf24" stroke-opacity="0.35"/>
+    <text x="38" y="244" font-size="13.5" fill="#fbbf24">像素酱：getDisplayMedia 为什么不弹窗？</text>
+    <text x="38" y="266" font-size="13" fill="#e2e8f0">码叔：它被严格限制在**用户手势回调**里，</text>
+    <text x="38" y="286" font-size="13" fill="#e2e8f0">setTimeout / Promise.then 异步层出去就失效。</text>
+    <text x="38" y="306" font-size="13" fill="#94a3b8">（Safari 对权限弹窗更严格，需要显式点"总是允许"）</text>
+  </g>
+
+  <!-- 面板 4 右下 · 结案 -->
+  <g transform="translate(608,462)">
+    <rect width="572" height="361" rx="14" fill="#0e1730" stroke="#223055"/>
+    <polygon points="480,0 572,0 120,361 0,361" fill="#f97316" opacity="0.05"/>
+    <rect x="14" y="13" width="26" height="20" rx="6" fill="#f97316"/>
+    <text x="27" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0b1220">4</text>
+    <text x="50" y="29" font-size="17" font-weight="bold" fill="#e2e8f0">结案：媒体管线三板斧</text>
+    <g transform="translate(52,95)">
+      <rect x="-19" y="14" width="38" height="22" rx="9" fill="#f8fafc" stroke="#223055" stroke-width="1.5"/>
+      <circle cx="0" cy="-2" r="17" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+      <circle cx="-5" cy="0" r="1.8" fill="#0b1220"/>
+      <circle cx="5" cy="0" r="1.8" fill="#0b1220"/>
+      <path d="M-4,5 q4,4 8,0" stroke="#0b1220" stroke-width="1.3" fill="none"/>
+    </g>
+    <polygon points="88,85 74,91 88,97" fill="#f8fafc"/>
+    <rect x="88" y="67" width="400" height="58" rx="10" fill="#f8fafc"/>
+    <text x="102" y="90" font-size="15" fill="#0b1220">码叔：记住媒体管线三步：</text>
+    <text x="102" y="112" font-size="15" fill="#0b1220">① getUserMedia 拿 stream → ② 找 tracks → ③ 赋 srcObject</text>
+    <rect x="24" y="152" width="524" height="178" rx="8" fill="#0a0f1c" stroke="#f97316" stroke-opacity="0.35"/>
+    <rect x="34" y="162" width="62" height="22" rx="5" fill="#f97316"/>
+    <text x="65" y="178" text-anchor="middle" font-size="12" font-weight="bold" fill="#0b1220">⚠ 坑点</text>
+    <text x="38" y="204" font-size="13" fill="#f472b6">1. track.stop() vs track.enabled = false</text>
+    <text x="52" y="226" font-size="12.5" fill="#94a3b8">stop() 彻底释放硬件，enabled=false 只是画面变黑但摄像头还在工作</text>
+    <text x="38" y="252" font-size="13" fill="#f472b6">2. iOS Safari 必须 playsinline</text>
+    <text x="52" y="274" font-size="12.5" fill="#94a3b8">&lt;video playsinline&gt; —— 否则进入全屏导致 WebRTC 崩溃</text>
+    <text x="38" y="300" font-size="13" fill="#f472b6">3. getDisplayMedia 必须点击触发</text>
+    <text x="52" y="322" font-size="12.5" fill="#94a3b8">异步层 setTimeout / fetch.then 里调用会被浏览器静默拒绝</text>
+  </g>
+
+  <text x="1180" y="826" text-anchor="end" font-size="11" fill="#475569">NEON INK · webrtc-5g-tutorial · EP.02</text>
+</svg>
